@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:46:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-01-23T17:22:38+01:00
+ * @Last modified time: 2019-01-24T13:33:07+01:00
  */
 
 .App {
@@ -12,6 +12,17 @@
   border: 5px solid blue
 }
 .question{
+  font-size: 40px;
   border: 5px solid red
 
+}
+.options {
+  font-size: 20px;
+  border: 2px dotted green;
+}
+li {
+  list-style: none;
+  padding: 15px;
+  margin: 30px;
+  background-color: #bdc3c7;
 }

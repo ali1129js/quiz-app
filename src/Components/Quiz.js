@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-01-24T11:26:40+01:00
+ * @Last modified time: 2019-01-24T13:32:01+01:00
  */
 import React, { Component } from "react";
 class Quiz extends Component {
@@ -22,8 +22,15 @@ class Quiz extends Component {
         }
       ],
       correct: 0,
-      questionNumber: 0
+      questionNumber: 1
     };
+  }
+  handleClick(e) {
+    const selectedAnswer = e.target.innerText;
+    const correctAnswer = "otters";
+    console.log(selectedAnswer, typeof selectedAnswer);
+    console.log(correctAnswer, typeof correctAnswer);
+    console.log(selectedAnswer === correctAnswer);
   }
   render() {
     const { questionNumber } = this.state;
@@ -34,9 +41,7 @@ class Quiz extends Component {
           <div className="options">
             {" "}
             {rawdata.options.map(subdata => (
-              <ul>
-                <li> {subdata} </li>{" "}
-              </ul>
+              <li onClick={this.handleClick}> {subdata} </li>
             ))}{" "}
           </div>
         ) : null}
@@ -46,13 +51,8 @@ class Quiz extends Component {
     return (
       <div className="quiz">
         <div className="jumbotron">
-          <h3 className="display-4">{questions[questionNumber]}</h3>
-          <p className="lead">
-            This is a simple hero unit, a simple jumbotron-style component for
-            calling extra attention to featured content or information.
-          </p>
-          <hr className="my-4" />
-          <p>h</p>
+          {questions[questionNumber]}
+
           <a
             className="btn btn-primary btn-lg"
             href="https://github.com"
