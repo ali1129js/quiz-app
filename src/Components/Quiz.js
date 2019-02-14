@@ -2,9 +2,10 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-01-24T14:17:38+01:00
+ * @Last modified time: 2019-02-14T12:28:18+01:00
  */
 import React, { Component } from "react";
+import Score from "./Score";
 class Quiz extends Component {
   constructor() {
     super();
@@ -12,38 +13,48 @@ class Quiz extends Component {
       questions: [
         {
           questionNumber: 0,
-          question: "What is 10 + 10",
-          options: ["3", "20", "34", "45"],
-          answer: "20"
+          question: "What is the most appropriate use of an object?",
+          options: [
+            "to have numeric properties (keys)",
+            "to only store strings",
+            "to hold pairs of named properties and values",
+            "to find out the count of properties"
+          ],
+          answer: "to hold pairs of named properties and values",
+          explain:
+            "You theoretically could use an array as a normal object with your own named properties, or you could use an object but only give it numeric properties (0, 1, etc.) similar to an array. However, this would generally be considered improper usage of the respective types. The best and most natural approach is to use arrays for numerically positioned values and use objects for named properties."
         },
         {
           questionNumber: 1,
-          question: "What is Athena's favourite animal",
-          options: ["otters", "dogs", "cats", "horses"],
-          answer: "otters"
+          question: "What is the return value of: typeof null?",
+          options: ["boolean", "object", "undefined", "number"],
+          answer: "object",
+          explain:
+            "typeof null is an interesting case, because it errantly returns 'object', when you'd expect it to return 'null' (just like typeof undefined returns undefined)"
         },
         {
           questionNumber: 2,
-          question: "How old is the PLanet",
-          options: [
-            "6000 Years",
-            "300,000 Years",
-            "1 million years",
-            "4.7 billion Years"
-          ],
-          answer: "4.7 billion Years"
+          question: "Which of the following is an array property?",
+          options: ["values", "count", "limit", "length"],
+          answer: "length",
+          explain:
+            "Because arrays are special objects (as typeof implies), they can also have properties, including the automatically updated length property."
         },
         {
           questionNumber: 3,
           question: "Which is a valid JavaScript type for numerical data?",
           options: ["float", "int", "number", "long"],
-          answer: "number"
+          answer: "number",
+          explain:
+            "Unlike many coding languages, JavaScript has only one primitve numerical type: number. This is used for both integers and floating point values."
         },
         {
           questionNumber: 4,
           question: "What is the output of console.log(typeof [])?",
           options: ["undefined", "object", "array", "null"],
-          answer: "object"
+          answer: "object",
+          explain:
+            "In JavaScript, arrays are a type of object. There is no array type."
         },
         {
           questionNumber: 5,
@@ -56,55 +67,77 @@ class Quiz extends Component {
             "anything can be stored in objects but only strings and numbers in an array"
           ],
           answer:
-            "arrays hold values with indexed positions instead of key/value pairs"
+            "arrays hold values with indexed positions instead of key/value pairs",
+
+          explain:
+            "An array is an object that holds values (of any type) not particularly in named properties/keys, but rather in numerically indexed positions. Languages that start counting at zero, like JS does, use 0 as the index of the first element in the array."
         }
       ],
-      correct: 0,
-      questionNumber: 5
+      score: 0,
+      questionNumber: 0,
+      correct: true
     };
+    this.handleClick = this.handleClick.bind(this);
   }
   handleClick(e) {
     const selectedAnswer = e.target.innerText;
     const correctAnswer = document.getElementById("answer").innerText;
-    console.log(selectedAnswer, typeof selectedAnswer);
-    console.log(correctAnswer, typeof correctAnswer);
-    console.log(selectedAnswer === correctAnswer);
+    if (selectedAnswer === correctAnswer) {
+      alert("Correct");
+      this.setState({
+        score: this.state.score + 1,
+        questionNumber: this.state.questionNumber + 1,
+        correct: true
+      });
+    } else {
+      alert("Incorrect! Try Again!");
+      this.setState({
+        correct: false
+      });
+    }
   }
 
   render() {
-    const { questionNumber } = this.state;
-    const questions = this.state.questions.map(rawdata => (
-      <div className="">
+    const { questionNumber, questions, score } = this.state;
+    const question = this.state.questions.map((rawdata, i) => (
+      <div key={i}>
         <div className="question">{rawdata.question}</div>
         {typeof (rawdata.options === "object") ? (
           <div className="options">
             {" "}
-            {rawdata.options.map(subdata => (
-              <li onClick={this.handleClick}> {subdata} </li>
+            {rawdata.options.map((subdata, i) => (
+              <li key={i} onClick={this.handleClick}>
+                <span>{subdata}</span>
+              </li>
             ))}{" "}
           </div>
         ) : null}
-        <div id="answer" className="hidden">
+        <div id="answer" className="hidden" hidden>
           {rawdata.answer}
         </div>
       </div>
     ));
-
-    return (
-      <div className="quiz">
-        <div className="jumbotron">
-          {questions[questionNumber]}
-
-          <a
-            className="btn btn-primary btn-lg"
-            href="https://github.com"
-            role="button"
-          >
-            Next
-          </a>
+    while (questionNumber < questions.length) {
+      return (
+        <div className="quiz">
+          <div className="jumbotron">
+            {question[questionNumber]}
+            <div className="results"> Your Score is {this.state.score} </div>
+            <button
+              onClick={() =>
+                this.setState({
+                  questionNumber: this.state.questionNumber + 1
+                })
+              }
+            >
+              {" "}
+              Skip This Question{" "}
+            </button>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return <Score score={score} length={questions.length} />;
   }
 }
 export default Quiz;

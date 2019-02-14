@@ -2,27 +2,32 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:46:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-01-24T13:33:07+01:00
+ * @Last modified time: 2019-02-14T11:58:46+01:00
  */
 
 .App {
   text-align: center;
 }
-.quiz {
-  border: 5px solid blue
-}
-.question{
-  font-size: 40px;
-  border: 5px solid red
 
+.question{
+  font-size: 38px;
+  font-family:fantasy;
+  font-weight: bold;
+  text-decoration-color: red;
 }
 .options {
-  font-size: 20px;
-  border: 2px dotted green;
+  font-size: 30px;
+  border: none;
+
 }
 li {
   list-style: none;
-  padding: 15px;
+  padding: 25px;
   margin: 30px;
   background-color: #bdc3c7;
+  box-shadow: 10px 10px 5px black;
+  border-radius: 15px;
+}
+.incorrect {
+  background-color: red;
 }
