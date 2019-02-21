@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:46:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-14T11:58:46+01:00
+ * @Last modified time: 2019-02-21T08:59:56+01:00
  */
 
 .App {
@@ -13,12 +13,11 @@
   font-size: 38px;
   font-family:fantasy;
   font-weight: bold;
-  text-decoration-color: red;
 }
 .options {
   font-size: 30px;
   border: none;
-
+border: 2px solid black;
 }
 li {
   list-style: none;
@@ -30,4 +29,14 @@ li {
 }
 .incorrect {
   background-color: red;
+}
+.finish {
+  text-align: center;
+  color: white;
+  background: radial-gradient(#dfe6e9, #2d3436);
+  font-size: 42px;
+  margin-top: 250px;
+  padding: 50px;
+  box-shadow: 10px 10px 5px black;
+  border: 2px solid red;
 }

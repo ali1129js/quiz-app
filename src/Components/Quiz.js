@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-14T12:28:18+01:00
+ * @Last modified time: 2019-02-21T08:50:33+01:00
  */
 import React, { Component } from "react";
 import Score from "./Score";
@@ -91,9 +91,12 @@ class Quiz extends Component {
       });
     } else {
       alert("Incorrect! Try Again!");
-      this.setState({
-        correct: false
-      });
+      this.setState(
+        {
+          correct: false
+        },
+        () => this.props.handleBackground()
+      );
     }
   }
 
@@ -122,8 +125,9 @@ class Quiz extends Component {
         <div className="quiz">
           <div className="jumbotron">
             {question[questionNumber]}
-            <div className="results"> Your Score is {this.state.score} </div>
+
             <button
+              className="btn btn-warning"
               onClick={() =>
                 this.setState({
                   questionNumber: this.state.questionNumber + 1

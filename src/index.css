@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-30T08:44:44+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-01-30T12:37:54+01:00
+ * @Last modified time: 2019-02-21T08:30:58+01:00
  */
 
 body {
@@ -13,10 +13,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+#root {
+  padding: 50px;
+  background-color: #34495e;
+height: 100vh;}
