@@ -2,34 +2,33 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:15:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-21T08:57:14+01:00
+ * @Last modified time: 2019-02-23T11:31:20+01:00
  */
 
 import React, { Component } from "react";
 import Quiz from "./Components/Quiz";
+import MyModal from "./Components/MyModal";
 import "./App.css";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      background: ""
-    };
+  constructor(props) {
+    super(props);
+    this.state = { isOpen: false };
   }
-
-  handleBackground = () => {
-    //change the background
+  toggleModal = () => {
     this.setState({
-      background: "red"
+      isOpen: !this.state.isOpen
     });
   };
+
   render() {
     return (
       <div className="container">
-        <div style={{ backgroundColor: this.state.background }}>
-          {" "}
-          <Quiz handleBackground={this.handleBackground} />{" "}
-        </div>
+        <MyModal show={this.state.isOpen} onClose={this.toggleModal} />
+        <Quiz
+          toggleModal={this.toggleModal}
+          handleBackground={this.handleBackground}
+        />
       </div>
     );
   }
