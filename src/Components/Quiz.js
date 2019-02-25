@@ -2,11 +2,11 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-24T11:23:44+01:00
+ * @Last modified time: 2019-02-25T19:08:04+01:00
  */
 import React, { Component } from "react";
 import Score from "./Score";
-
+import ListItem from "./ListItem";
 class Quiz extends Component {
   constructor(props) {
     super(props);
@@ -36,25 +36,20 @@ class Quiz extends Component {
   };
 
   render() {
-    const { questionNumber, questions, score, answerSubmitted } = this.state;
+    const { questionNumber, questions, score } = this.state;
     const question = questions.map((rawdata, i) => (
       <div key={i}>
         <div className="question">{rawdata.question}</div>
         {typeof (rawdata.options === "object") ? (
           <div className="options">
             {" "}
-            {rawdata.options.map((subdata, i) => {
-              let answerColor;
-              if (answerSubmitted) {
-                answerColor = { color: "green" };
-              } else {
-                answerColor = { color: "red" };
-              }
-
+            {rawdata.options.map((option, i) => {
               return (
-                <li key={i} data-index={i} onClick={this.handleClick}>
-                  <span style={answerColor}>{subdata}</span>
-                </li>
+                <ListItem
+                  key={i}
+                  option={option}
+                  handleClick={this.handleClick}
+                />
               );
             })}
           </div>
