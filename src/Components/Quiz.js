@@ -2,57 +2,61 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-23T11:30:16+01:00
+ * @Last modified time: 2019-02-24T11:23:44+01:00
  */
 import React, { Component } from "react";
 import Score from "./Score";
-import { QuestionsDeck, Scope } from "../QuestionsDeck";
 
 class Quiz extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      questions: Scope,
+      questions: this.props.questions,
       score: 0,
       questionNumber: 0,
-      correct: true
+      answerSubmitted: null
     };
   }
-  handleClick(e, i) {
-    console.log(e.target.elements);
+  handleClick = e => {
+    const index = e.target.dataset.index;
     const selectedAnswer = e.target.innerText;
     const correctAnswer = document.getElementById("answer").innerText;
     if (selectedAnswer === correctAnswer) {
-      this.props.toggleModal();
-
       this.setState({
         score: this.state.score + 1,
         questionNumber: this.state.questionNumber + 1,
-        correct: true
+        answerSubmitted: true
       });
     } else {
       this.props.toggleModal();
-
-      this.setColor(i);
+      this.setState({
+        answerSubmitted: false
+      });
     }
-  }
-  setColor = i => {
-    console.log(i);
   };
 
   render() {
-    const { questionNumber, questions, score } = this.state;
+    const { questionNumber, questions, score, answerSubmitted } = this.state;
     const question = questions.map((rawdata, i) => (
       <div key={i}>
         <div className="question">{rawdata.question}</div>
         {typeof (rawdata.options === "object") ? (
           <div className="options">
             {" "}
-            {rawdata.options.map((subdata, i) => (
-              <li key={i} index={i} onClick={e => this.handleClick(e, i)}>
-                <span>{subdata}</span>
-              </li>
-            ))}{" "}
+            {rawdata.options.map((subdata, i) => {
+              let answerColor;
+              if (answerSubmitted) {
+                answerColor = { color: "green" };
+              } else {
+                answerColor = { color: "red" };
+              }
+
+              return (
+                <li key={i} data-index={i} onClick={this.handleClick}>
+                  <span style={answerColor}>{subdata}</span>
+                </li>
+              );
+            })}
           </div>
         ) : null}
         <div id="answer" className="hidden" hidden>

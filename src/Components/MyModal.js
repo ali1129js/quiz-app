@@ -1,56 +1,55 @@
 /**
  * @Author: Ali
- * @Date:   2019-02-23T10:48:15+01:00
+ * @Date:   2019-02-23T11:36:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-23T11:16:06+01:00
+ * @Last modified time: 2019-02-23T11:50:02+01:00
  */
-import React from "react";
-import PropTypes from "prop-types";
 
-class MyModal extends React.Component {
+import React, { Component } from "react";
+import styled from "styled-components";
+const Content = styled.div`
+  background: linear-gradient(to bottom right, #3498db, papayawhip, #f39c12);
+  margin: auto;
+  height: 10em;
+  width: 12em;
+  font-size: 1.2em;
+  text-align: center;
+  border: 3px solid #fab1a0;
+  padding: 5px;
+  padding-top: 10px;
+  box-shadow: 8px 10px #000000;
+`;
+const backdropStyle = {
+  position: "fixed",
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: "#34495e",
+  padding: 50
+};
+class MyModal extends Component {
   render() {
-    // Render nothing if the "show" prop is false
     if (!this.props.show) {
       return null;
     }
-
-    // The gray background
-    const backdropStyle = {
-      position: "fixed",
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: "rgba(0,0,0,0.3)",
-      padding: 50
-    };
-
-    // The modal "window"
-    const modalStyle = {
-      backgroundColor: "#fff",
-      borderRadius: 5,
-      maxWidth: 800,
-      minHeight: 600,
-      margin: "0 auto",
-      padding: 30
-    };
-
     return (
-      <div className="backdrop" style={{ backdropStyle }}>
-        <div className="modal" style={{ modalStyle }}>
-          nadasd
-          <div className="footer">
-            <button onClick={this.props.onClose}>Close</button>
-          </div>
+      <div className="backdrop" style={backdropStyle}>
+        <div className="modal-body">
+          <Content>
+            Incorrect! Try again.
+            <div className="footer mt-4">
+              <button
+                className="btn btn-outline-dark"
+                onClick={this.props.onClose}
+              >
+                Close
+              </button>
+            </div>
+          </Content>
         </div>
       </div>
     );
   }
 }
-
-MyModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  show: PropTypes.bool
-};
-
 export default MyModal;
