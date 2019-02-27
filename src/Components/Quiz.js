@@ -2,9 +2,10 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-25T19:08:04+01:00
+ * @Last modified time: 2019-02-27T10:45:24+01:00
  */
 import React, { Component } from "react";
+import uuid from "uuid";
 import Score from "./Score";
 import ListItem from "./ListItem";
 class Quiz extends Component {
@@ -14,29 +15,38 @@ class Quiz extends Component {
       questions: this.props.questions,
       score: 0,
       questionNumber: 0,
-      answerSubmitted: null
+      answerSubmitted: false,
+      isCorrect: false
     };
   }
   handleClick = e => {
     const index = e.target.dataset.index;
+    console.log(index);
     const selectedAnswer = e.target.innerText;
     const correctAnswer = document.getElementById("answer").innerText;
     if (selectedAnswer === correctAnswer) {
       this.setState({
         score: this.state.score + 1,
         questionNumber: this.state.questionNumber + 1,
-        answerSubmitted: true
+        answerSubmitted: true,
+        isCorrect: true
       });
     } else {
       this.props.toggleModal();
       this.setState({
-        answerSubmitted: false
+        answerSubmitted: true
       });
     }
   };
 
   render() {
-    const { questionNumber, questions, score } = this.state;
+    const {
+      questionNumber,
+      questions,
+      score,
+      answerSubmitted,
+      isCorrect
+    } = this.state;
     const question = questions.map((rawdata, i) => (
       <div key={i}>
         <div className="question">{rawdata.question}</div>
@@ -47,8 +57,11 @@ class Quiz extends Component {
               return (
                 <ListItem
                   key={i}
+                  id={uuid.v4()}
                   option={option}
                   handleClick={this.handleClick}
+                  answerSubmitted={answerSubmitted}
+                  isCorrect={isCorrect}
                 />
               );
             })}

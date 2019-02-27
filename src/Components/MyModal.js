@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:36:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-23T11:50:02+01:00
+ * @Last modified time: 2019-02-26T09:39:45+01:00
  */
 
 import React, { Component } from "react";
@@ -10,7 +10,7 @@ import styled from "styled-components";
 const Content = styled.div`
   background: linear-gradient(to bottom right, #3498db, papayawhip, #f39c12);
   margin: auto;
-  height: 10em;
+  height: 8em;
   width: 12em;
   font-size: 1.2em;
   text-align: center;
