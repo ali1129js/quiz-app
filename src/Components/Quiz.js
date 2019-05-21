@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-27T10:45:24+01:00
+ * @Last modified time: 2019-05-07T12:13:59+02:00
  */
 import React, { Component } from "react";
 import uuid from "uuid";
@@ -12,6 +12,7 @@ class Quiz extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //anti-pattern????
       questions: this.props.questions,
       score: 0,
       questionNumber: 0,
@@ -19,7 +20,7 @@ class Quiz extends Component {
       isCorrect: false
     };
   }
-  handleClick = e => {
+  handleClick = (e, id) => {
     const index = e.target.dataset.index;
     console.log(index);
     const selectedAnswer = e.target.innerText;
@@ -56,10 +57,10 @@ class Quiz extends Component {
             {rawdata.options.map((option, i) => {
               return (
                 <ListItem
-                  key={i}
+                  key={uuid.v4()}
                   id={uuid.v4()}
                   option={option}
-                  handleClick={this.handleClick}
+                  handleClick={e => this.handleClick(e, option.id)}
                   answerSubmitted={answerSubmitted}
                   isCorrect={isCorrect}
                 />
@@ -103,6 +104,10 @@ class Quiz extends Component {
             >
               {" "}
               Skip This Question{" "}
+            </button>
+            <button className="btn btn-info  mt-3 ml-5">
+              {" "}
+              {this.state.score}/{questions.length}{" "}
             </button>
           </div>
         </div>

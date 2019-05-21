@@ -2,8 +2,10 @@
  * @Author: Ali
  * @Date:   2019-02-22T11:46:34+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-23T08:13:16+01:00
+ * @Last modified time: 2019-03-02T11:38:28+01:00
  */
+import uuid from "uuid";
+
 export const QuestionsDeck = [
   {
     questionNumber: 0,
@@ -222,7 +224,12 @@ export const LexicalScope = [
   {
     questionNumber: 1,
     question: "",
-    options: ["", "", "", ""],
+    options: [
+      { id: uuid.v4(), text: "" },
+      { id: uuid.v4(), text: "" },
+      { id: uuid.v4(), text: "" },
+      { id: uuid.v4(), text: "" }
+    ],
     answer: "",
     explain: ""
   },

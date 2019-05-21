@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:54:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-24T11:20:53+01:00
+ * @Last modified time: 2019-05-20T16:52:29+02:00
  */
 import React, { Component } from "react";
 import { QuestionsDeck, Scope } from "../QuestionsDeck";
@@ -15,18 +15,10 @@ class SelectQuiz extends Component {
       inputValue: null
     };
   }
-
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
   handleClose = e => {
-    let value = e.target.value;
-    this.setState(
-      {
-        changeDeck: value
-      },
-      () => {
-        this.props.changeDeck(this.state.changeDeck);
-      }
-    );
+    let currentDeck = e.target.value;
+    console.log(currentDeck);
   };
   render() {
     const menuClass = `dropdown-menu${this.state.isOpen ? " show" : ""}`;
@@ -48,15 +40,14 @@ class SelectQuiz extends Component {
           </button>
           <div className={menuClass} aria-labelledby="dropdownMenuButton">
             <button
-              value={this.state.inputValue}
+              value={"QuestionsDeck"}
               className="dropdown-item"
               onClick={this.handleClose}
             >
               QuestionsDeck
             </button>
-
             <button
-              value={"deckSet"}
+              value={"Scope"}
               className="dropdown-item"
               onClick={this.handleClose}
             >

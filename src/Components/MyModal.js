@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:36:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-02-26T09:39:45+01:00
+ * @Last modified time: 2019-05-07T10:47:17+02:00
  */
 
 import React, { Component } from "react";
@@ -44,6 +44,12 @@ class MyModal extends Component {
                 onClick={this.props.onClose}
               >
                 Close
+              </button>
+              <button
+                className="btn btn-outline-dark ml-2"
+                onClick={this.props.onClose}
+              >
+                See Answer
               </button>
             </div>
           </Content>
