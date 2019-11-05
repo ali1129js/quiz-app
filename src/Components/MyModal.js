@@ -2,9 +2,8 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:36:40+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-05-07T10:47:17+02:00
+ * @Last modified time: 2019-11-05T06:34:34+01:00
  */
-
 import React, { Component } from "react";
 import styled from "styled-components";
 const Content = styled.div`
@@ -28,34 +27,29 @@ const backdropStyle = {
   backgroundColor: "#34495e",
   padding: 50
 };
-class MyModal extends Component {
-  render() {
-    if (!this.props.show) {
-      return null;
-    }
-    return (
-      <div className="backdrop" style={backdropStyle}>
-        <div className="modal-body">
-          <Content>
-            Incorrect! Try again.
-            <div className="footer mt-4">
-              <button
-                className="btn btn-outline-dark"
-                onClick={this.props.onClose}
-              >
-                Close
-              </button>
-              <button
-                className="btn btn-outline-dark ml-2"
-                onClick={this.props.onClose}
-              >
-                See Answer
-              </button>
-            </div>
-          </Content>
-        </div>
-      </div>
-    );
+const MyModal = props => {
+  if (!props.show) {
+    return null;
   }
-}
+  return (
+    <div className="backdrop" style={backdropStyle}>
+      <div className="modal-body">
+        <Content>
+          Incorrect! Try again.
+          <div className="footer mt-4">
+            <button className="btn btn-outline-dark" onClick={props.onClose}>
+              Close
+            </button>
+            <button
+              className="btn btn-outline-dark ml-2"
+              onClick={props.onClose}
+            >
+              See Answer
+            </button>
+          </div>
+        </Content>
+      </div>
+    </div>
+  );
+};
 export default MyModal;

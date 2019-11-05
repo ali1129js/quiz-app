@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:54:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-05-20T16:52:29+02:00
+ * @Last modified time: 2019-05-22T09:15:23+02:00
  */
 import React, { Component } from "react";
 import { QuestionsDeck, Scope } from "../QuestionsDeck";
@@ -18,7 +18,14 @@ class SelectQuiz extends Component {
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
   handleClose = e => {
     let currentDeck = e.target.value;
-    console.log(currentDeck);
+    if (currentDeck === undefined) {
+      console.log("currentDeck undefined");
+    } else {
+      this.setState(
+        { changeDeck: currentDeck },
+        this.props.changeDeck(currentDeck)
+      );
+    }
   };
   render() {
     const menuClass = `dropdown-menu${this.state.isOpen ? " show" : ""}`;
