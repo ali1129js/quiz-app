@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:15:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2020-02-19T22:57:06+01:00
+ * @Last modified time: 2020-02-19T22:59:03+01:00
  */
 
 import React, { Component } from "react";
@@ -13,13 +13,10 @@ import { QuestionsDeck, Scope } from "./QuestionsDeck";
 import "./App.css";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      deck: QuestionsDeck
-    };
-  }
+  state = {
+    isOpen: false,
+    deck: QuestionsDeck
+  };
 
   toggleModal = () => {
     this.setState({
