@@ -2,31 +2,19 @@
  * @Author: Ali
  * @Date:   2019-02-23T11:54:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-05-22T09:15:23+02:00
+ * @Last modified time: 2020-02-19T22:51:03+01:00
  */
 import React, { Component } from "react";
-import { QuestionsDeck, Scope } from "../QuestionsDeck";
+
 class SelectQuiz extends Component {
   constructor() {
     super();
     this.state = {
-      changeDeck: null,
-      isOpen: false,
-      inputValue: null
+      isOpen: false
     };
   }
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
-  handleClose = e => {
-    let currentDeck = e.target.value;
-    if (currentDeck === undefined) {
-      console.log("currentDeck undefined");
-    } else {
-      this.setState(
-        { changeDeck: currentDeck },
-        this.props.changeDeck(currentDeck)
-      );
-    }
-  };
+
   render() {
     const menuClass = `dropdown-menu${this.state.isOpen ? " show" : ""}`;
     return (
@@ -49,14 +37,14 @@ class SelectQuiz extends Component {
             <button
               value={"QuestionsDeck"}
               className="dropdown-item"
-              onClick={this.handleClose}
+              onClick={this.props.changeDeck}
             >
               QuestionsDeck
             </button>
             <button
               value={"Scope"}
               className="dropdown-item"
-              onClick={this.handleClose}
+              onClick={this.props.changeDeck}
             >
               Scope
             </button>

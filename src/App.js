@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:15:58+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-11-05T06:17:33+01:00
+ * @Last modified time: 2020-02-19T22:57:06+01:00
  */
 
 import React, { Component } from "react";
@@ -17,7 +17,7 @@ class App extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      deck: Scope
+      deck: QuestionsDeck
     };
   }
 
@@ -26,7 +26,12 @@ class App extends Component {
       isOpen: !this.state.isOpen
     });
   };
-  changeDeck = currentDeck => this.setState({ currentDeck });
+  changeDeck = () => {
+    console.log("logged");
+    this.setState(state => ({
+      deck: Scope
+    }));
+  };
 
   render() {
     return (

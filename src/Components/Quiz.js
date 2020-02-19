@@ -2,7 +2,7 @@
  * @Author: Ali
  * @Date:   2019-01-23T16:35:52+01:00
  * @Last modified by:   Ali
- * @Last modified time: 2019-05-07T12:13:59+02:00
+ * @Last modified time: 2020-02-18T09:25:15+01:00
  */
 import React, { Component } from "react";
 import uuid from "uuid";
@@ -21,8 +21,6 @@ class Quiz extends Component {
     };
   }
   handleClick = (e, id) => {
-    const index = e.target.dataset.index;
-    console.log(index);
     const selectedAnswer = e.target.innerText;
     const correctAnswer = document.getElementById("answer").innerText;
     if (selectedAnswer === correctAnswer) {
