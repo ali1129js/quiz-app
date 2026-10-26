@@ -7,6 +7,7 @@ import { DeckPicker } from "./components/DeckPicker";
 import { QuestionCard } from "./components/QuestionCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { Results } from "./components/Results";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 function prepare(deck: Deck, shuffled: boolean) {
   return shuffled ? shuffleQuestions(deck.questions) : deck.questions;
@@ -45,7 +46,10 @@ export default function App() {
             <span aria-hidden="true">{"{ }"}</span> JS Quiz
           </button>
         </h1>
-        {deck && <p className="deck-label">{deck.title}</p>}
+        <div className="header-right">
+          {deck && <p className="deck-label">{deck.title}</p>}
+          <ThemeToggle />
+        </div>
       </header>
 
       <main>

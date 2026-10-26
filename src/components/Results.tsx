@@ -22,7 +22,7 @@ export function Results({ deck, questions, answers, best, isNewBest, onRestart, 
   const wrong = missed(questions, answers);
 
   return (
-    <section className="card results" aria-labelledby="results-title">
+    <section className="card card-3d results" aria-labelledby="results-title">
       <h2 id="results-title" tabIndex={-1} ref={headingRef}>
         {deck.title}: you scored {s} / {total}
       </h2>
@@ -46,7 +46,7 @@ export function Results({ deck, questions, answers, best, isNewBest, onRestart, 
           <h3>Review missed questions ({wrong.length})</h3>
           <ol className="review">
             {wrong.map(({ question, answer }) => (
-              <li key={question.id}>
+              <li key={question.id} className="review-card card-3d" tabIndex={0}>
                 <p className="review-prompt">{question.prompt}</p>
                 {question.code && (
                   <pre className="code">

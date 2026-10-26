@@ -27,7 +27,7 @@ export function QuestionCard({ question, number, selected, isLast, onAnswer, onN
   }, [answered]);
 
   return (
-    <article className="card" aria-labelledby={`q-${question.id}`}>
+    <article className="card card-3d" aria-labelledby={`q-${question.id}`}>
       <h2 id={`q-${question.id}`} className="prompt" tabIndex={-1} ref={headingRef}>
         <span className="visually-hidden">Question {number}: </span>
         {question.prompt}

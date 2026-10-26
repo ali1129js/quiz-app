@@ -31,7 +31,7 @@ export function DeckPicker({ decks, best, onStart }: Props) {
               const b = best[deck.id];
               return (
                 <li key={deck.id}>
-                  <button type="button" className="deck-card" onClick={() => onStart(deck.id, shuffled)}>
+                  <button type="button" className="deck-card card-3d" onClick={() => onStart(deck.id, shuffled)}>
                     <span className="deck-title">{deck.title}</span>
                     <span className="deck-desc">{deck.description}</span>
                     <span className="deck-meta">
