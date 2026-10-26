@@ -1,0 +1,171 @@
+{
+  "id": "get-started",
+  "book": "You Don't Know JS Yet",
+  "title": "Get Started",
+  "description": "What JS is, values, functions and the big picture",
+  "questions": [
+    {
+      "id": "gs-1",
+      "prompt": "Which statement about JavaScript and Java is true?",
+      "options": [
+        "JavaScript is a lightweight subset of Java",
+        "They are unrelated languages that only share some C-style syntax and a marketing-driven name",
+        "JavaScript is compiled to Java bytecode",
+        "Java is the official name of the JavaScript standard"
+      ],
+      "answerIndex": 1,
+      "explanation": "The name was a 1990s marketing decision. The languages have different type systems, object models and runtimes. The standard behind JavaScript is ECMAScript, maintained by TC39.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch1.md"
+    },
+    {
+      "id": "gs-2",
+      "prompt": "Who decides what new features become part of the JavaScript language?",
+      "options": [
+        "Each browser vendor separately",
+        "The W3C",
+        "TC39, the technical committee that maintains the ECMAScript specification",
+        "Node.js maintainers"
+      ],
+      "answerIndex": 2,
+      "explanation": "TC39 (part of Ecma International) moves proposals through stages 0–4; a feature reaching stage 4 is added to the next yearly ECMAScript edition. Browsers and Node then implement the spec.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch1.md"
+    },
+    {
+      "id": "gs-3",
+      "prompt": "Is console.log() part of the JavaScript language specification?",
+      "options": [
+        "Yes, it is defined by ECMAScript",
+        "No, it is provided by the host environment (browser, Node, …)",
+        "Only in strict mode",
+        "Only inside modules"
+      ],
+      "answerIndex": 1,
+      "explanation": "Things like console, alert, fetch, setTimeout and the DOM come from the environment that hosts the JS engine, not from the language itself. They happen to be available almost everywhere, which makes them feel like part of JS.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch1.md"
+    },
+    {
+      "id": "gs-4",
+      "prompt": "What does this log?",
+      "code": "const name = 'Ali';\nconsole.log('Hi, ${name}');",
+      "options": [
+        "Hi, undefined",
+        "Hi, Ali",
+        "Hi, ${name}",
+        "SyntaxError"
+      ],
+      "answerIndex": 2,
+      "explanation": "Only backtick strings (template literals) interpolate ${…}. With single or double quotes the characters are kept literally.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-5",
+      "prompt": "What does this code do?",
+      "code": "const list = [1, 2, 3];\nlist.push(4);\nconsole.log(list);",
+      "options": [
+        "Logs [1, 2, 3, 4]",
+        "Logs [1, 2, 3]",
+        "Throws a TypeError, because const arrays can't change",
+        "Throws a SyntaxError"
+      ],
+      "answerIndex": 0,
+      "explanation": "const prevents re-assigning the variable (list = … would throw), but it does not make the value immutable. Mutating the array through the variable is allowed; use Object.freeze() if you need a read-only value.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-6",
+      "prompt": "Which of these values is falsy?",
+      "options": [
+        "\"0\"",
+        "[]",
+        "0n",
+        "{}"
+      ],
+      "answerIndex": 2,
+      "explanation": "The falsy values are false, 0, -0, 0n, \"\", null, undefined and NaN (plus the legacy document.all). The string \"0\" and every object, including empty arrays and empty objects, are truthy.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-7",
+      "prompt": "What does this log?",
+      "code": "const a = { n: 1 };\nconst b = a;\nb.n = 2;\nlet x = 1;\nlet y = x;\ny = 2;\nconsole.log(a.n, x);",
+      "options": [
+        "1 1",
+        "2 1",
+        "1 2",
+        "2 2"
+      ],
+      "answerIndex": 1,
+      "explanation": "Objects are shared by reference: b and a point to the same object, so a.n becomes 2. Primitives are copied by value: y got its own copy of 1, so changing it doesn't touch x.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-8",
+      "prompt": "What does this log?",
+      "code": "console.log([1, 2] === [1, 2]);",
+      "options": [
+        "true",
+        "false",
+        "undefined",
+        "TypeError"
+      ],
+      "answerIndex": 1,
+      "explanation": "=== on objects compares identity, not contents. The two literals create two separate arrays, so the comparison is false even though they look the same. Compare contents yourself (or with a helper) when you need structural equality.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-9",
+      "prompt": "Which statement about functions in JavaScript is true?",
+      "options": [
+        "Functions are a special non-value construct",
+        "Functions are values: they can be stored in variables, passed as arguments and returned from other functions",
+        "Only arrow functions can be passed as arguments",
+        "Functions cannot have properties"
+      ],
+      "answerIndex": 1,
+      "explanation": "Functions are first-class values (typeof gives \"function\", and they are objects). That is what makes callbacks, higher-order functions like map, and closures possible.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "gs-10",
+      "prompt": "What does this log?",
+      "code": "for (const v of [1, 2, 3]) console.log(v);",
+      "options": [
+        "0 1 2",
+        "1 2 3",
+        "3 3 3",
+        "undefined"
+      ],
+      "answerIndex": 1,
+      "explanation": "for…of iterates over the values produced by an iterable — here the array elements 1, 2, 3. for…in would instead give the keys \"0\", \"1\", \"2\".",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch3.md"
+    },
+    {
+      "id": "gs-11",
+      "prompt": "Why does this log 2 and then 3?",
+      "code": "function makeCounter() {\n  let count = 1;\n  return () => ++count;\n}\nconst inc = makeCounter();\nconsole.log(inc());\nconsole.log(inc());",
+      "options": [
+        "Because inc is called with a new count each time",
+        "Because the returned function closes over count and keeps it alive between calls",
+        "Because count is a global variable",
+        "Because let variables are shared by all functions"
+      ],
+      "answerIndex": 1,
+      "explanation": "makeCounter has returned, but the inner arrow function still references its count variable. That preserved link from a function to the variables of the scope it was created in is a closure.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch3.md"
+    },
+    {
+      "id": "gs-12",
+      "prompt": "What does this log?",
+      "code": "const ali = { name: 'Ali', greet() { return 'Hi from ' + this.name; } };\nconst sam = { name: 'Sam', greet: ali.greet };\nconsole.log(sam.greet());",
+      "options": [
+        "\"Hi from Ali\"",
+        "\"Hi from undefined\"",
+        "\"Hi from Sam\"",
+        "TypeError"
+      ],
+      "answerIndex": 2,
+      "explanation": "this is not fixed when a function is written; it depends on how the function is called. Called as sam.greet(), this is sam, even though greet was originally defined in ali's object literal.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch3.md"
+    }
+  ]
+}

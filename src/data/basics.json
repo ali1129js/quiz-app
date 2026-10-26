@@ -1,0 +1,88 @@
+{
+  "id": "basics",
+  "book": "Classic decks",
+  "title": "JS Basics",
+  "description": "Types, objects and arrays",
+  "questions": [
+    {
+      "id": "basics-1",
+      "prompt": "What is a plain object best suited for?",
+      "options": [
+        "Storing values under numeric keys 0, 1, 2…",
+        "Storing only strings",
+        "Storing values under named keys (key/value pairs)",
+        "Counting how many properties something has"
+      ],
+      "answerIndex": 2,
+      "explanation": "Objects map names (string or symbol keys) to values, e.g. { name: 'Ali', age: 30 }. For ordered, numerically indexed data an array is the better fit; for counting entries or arbitrary key types, a Map is often nicer than a plain object.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "basics-2",
+      "prompt": "What does this expression evaluate to?",
+      "code": "typeof null",
+      "options": [
+        "\"boolean\"",
+        "\"object\"",
+        "\"undefined\"",
+        "\"null\""
+      ],
+      "answerIndex": 1,
+      "explanation": "typeof null is \"object\" — a bug from the very first JavaScript implementation that was kept for backwards compatibility. null is really its own primitive type, so check for it with value === null.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "basics-3",
+      "prompt": "Which of these is a built-in data property of every array?",
+      "options": [
+        "size",
+        "count",
+        "limit",
+        "length"
+      ],
+      "answerIndex": 3,
+      "explanation": "length is a data property that is always one more than the highest index, and it updates automatically as you add elements. size is what Map and Set use; arrays have no count or limit property.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "basics-4",
+      "prompt": "Which of these is a real typeof result for numeric values in JavaScript?",
+      "options": [
+        "\"float\"",
+        "\"int\"",
+        "\"number\"",
+        "\"long\""
+      ],
+      "answerIndex": 2,
+      "explanation": "JavaScript has no separate int/float/long types: ordinary numbers (both 42 and 4.2) are 64-bit floating point values of type \"number\". Since ES2020 there is also a second numeric primitive, bigint (e.g. 42n), for arbitrarily large integers.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "basics-5",
+      "prompt": "What does this log?",
+      "code": "console.log(typeof []);",
+      "options": [
+        "\"undefined\"",
+        "\"object\"",
+        "\"array\"",
+        "\"null\""
+      ],
+      "answerIndex": 1,
+      "explanation": "Arrays are a kind of object, so typeof returns \"object\" — there is no \"array\" typeof result. Use Array.isArray(value) to check for an array.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    },
+    {
+      "id": "basics-6",
+      "prompt": "What is the main difference between an array and a plain object?",
+      "options": [
+        "Arrays can hold more values",
+        "Array indexes start at 0, object keys start at 1",
+        "Arrays store values by numeric position; objects store values by named key",
+        "Arrays can only hold strings and numbers"
+      ],
+      "answerIndex": 2,
+      "explanation": "Both can hold any kind of value and neither has a practical size difference. An array keeps values in numbered, ordered positions starting at 0 (and tracks length); an object is a collection of named properties.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md"
+    }
+  ]
+}

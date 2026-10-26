@@ -1,0 +1,173 @@
+{
+  "id": "scope-closures",
+  "book": "You Don't Know JS Yet",
+  "title": "Scope & Closures",
+  "description": "Lexical scope, hoisting, TDZ, closures and modules",
+  "questions": [
+    {
+      "id": "sc-1",
+      "prompt": "What does this log?",
+      "code": "let x = 1;\n{\n  let x = 2;\n}\nconsole.log(x);",
+      "options": [
+        "1",
+        "2",
+        "ReferenceError",
+        "undefined"
+      ],
+      "answerIndex": 0,
+      "explanation": "The inner block declares its own x that shadows the outer one only inside the braces. After the block ends, x refers to the outer variable again.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch3.md"
+    },
+    {
+      "id": "sc-2",
+      "prompt": "What does this log?",
+      "code": "console.log(greet());\nfunction greet() { return 'hi'; }",
+      "options": [
+        "\"hi\"",
+        "undefined",
+        "ReferenceError",
+        "TypeError"
+      ],
+      "answerIndex": 0,
+      "explanation": "Function declarations are hoisted together with their body, so the function can be called before the line it is written on.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch5.md"
+    },
+    {
+      "id": "sc-3",
+      "prompt": "What does this log?",
+      "code": "console.log(v);\nvar v = 5;",
+      "options": [
+        "5",
+        "undefined",
+        "ReferenceError",
+        "null"
+      ],
+      "answerIndex": 1,
+      "explanation": "The var declaration is hoisted to the top of the function/global scope and initialized to undefined; the assignment = 5 only happens when that line runs.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch5.md"
+    },
+    {
+      "id": "sc-4",
+      "prompt": "What happens here?",
+      "code": "console.log(v);\nlet v = 5;",
+      "options": [
+        "Logs undefined",
+        "Logs 5",
+        "Throws ReferenceError",
+        "Throws SyntaxError"
+      ],
+      "answerIndex": 2,
+      "explanation": "let and const declarations are hoisted too, but they stay uninitialized until their declaration line runs. Accessing them earlier — the temporal dead zone (TDZ) — throws a ReferenceError (\"Cannot access 'v' before initialization\").",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch5.md"
+    },
+    {
+      "id": "sc-5",
+      "prompt": "What does this log?",
+      "code": "let x = 'outer';\n{\n  console.log(x);\n  let x = 'inner';\n}",
+      "options": [
+        "\"outer\"",
+        "\"inner\"",
+        "undefined",
+        "ReferenceError"
+      ],
+      "answerIndex": 3,
+      "explanation": "The inner let x shadows the outer x for the whole block, starting at the opening brace, not at the let line. So console.log(x) refers to the inner x while it is still in its TDZ and throws.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch5.md"
+    },
+    {
+      "id": "sc-6",
+      "prompt": "What does this log?",
+      "code": "for (let i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i));\n}",
+      "options": [
+        "0 1 2",
+        "3 3 3",
+        "2 2 2",
+        "undefined undefined undefined"
+      ],
+      "answerIndex": 0,
+      "explanation": "With let in a for loop header, each iteration gets a fresh binding of i, and each callback closes over its own copy. (With var there is a single shared i and you would get 3 3 3.)",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "sc-7",
+      "prompt": "Which description of a closure is most accurate?",
+      "options": [
+        "A copy of a variable's value taken when a function is created",
+        "A function's live link to the variables of the scope where it was defined, which persists even after that scope has finished",
+        "A function that cannot be called again",
+        "A private variable created by the class keyword"
+      ],
+      "answerIndex": 1,
+      "explanation": "Closure keeps access to the variables themselves, not snapshots. If the variable changes later, the function sees the new value.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "sc-8",
+      "prompt": "What does this log?",
+      "code": "let n = 1;\nconst show = () => n;\nn = 2;\nconsole.log(show());",
+      "options": [
+        "1",
+        "2",
+        "undefined",
+        "ReferenceError"
+      ],
+      "answerIndex": 1,
+      "explanation": "Closures capture variables, not values. show reads n when it is called, and by then n has been updated to 2.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "sc-9",
+      "prompt": "What does this log?",
+      "code": "function createCounter() {\n  let count = 0;\n  return {\n    inc() { return ++count; }\n  };\n}\nconst counter = createCounter();\ncounter.inc();\nconsole.log(counter.inc(), counter.count);",
+      "options": [
+        "2 undefined",
+        "2 0",
+        "1 undefined",
+        "TypeError"
+      ],
+      "answerIndex": 0,
+      "explanation": "This is the module pattern: count lives in the factory's scope and can only be reached through the public methods that close over it. counter.count is undefined because count was never a property of the returned object.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch8.md"
+    },
+    {
+      "id": "sc-10",
+      "prompt": "Which statement about ES modules (import/export) is true?",
+      "options": [
+        "Every file shares a single global scope",
+        "Each module has its own top-level scope, runs in strict mode, and only exported bindings are visible to importers",
+        "Modules are re-executed every time they are imported",
+        "Variables in modules are automatically added to window"
+      ],
+      "answerIndex": 1,
+      "explanation": "Top-level declarations in a module are local to that module. Modules are always strict, are evaluated once (later imports get the same instance) and expose only what they export.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch8.md"
+    },
+    {
+      "id": "sc-11",
+      "prompt": "What does this log in a browser script that is NOT a module?",
+      "code": "var a = 1;\nlet b = 1;\nconsole.log(window.a, window.b);",
+      "options": [
+        "undefined undefined",
+        "1 undefined",
+        "1 1",
+        "ReferenceError"
+      ],
+      "answerIndex": 1,
+      "explanation": "In a classic (non-module) script, a top-level var becomes a property of the global object (window), but let/const/class are global variables without a matching property. Inside a module neither would appear on window.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch4.md"
+    },
+    {
+      "id": "sc-12",
+      "prompt": "What is an IIFE mainly used for?",
+      "options": [
+        "Making a function run faster",
+        "Creating a new scope immediately so its variables don't leak into the surrounding scope",
+        "Declaring a class",
+        "Delaying a function until the page loads"
+      ],
+      "answerIndex": 1,
+      "explanation": "An Immediately Invoked Function Expression — (function () { … })() — runs once right away and keeps its inner variables private. In modern code a plain block with let/const or an ES module often achieves the same.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch6.md"
+    }
+  ]
+}

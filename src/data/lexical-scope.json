@@ -1,0 +1,129 @@
+{
+  "id": "lexical-scope",
+  "book": "Classic decks",
+  "title": "Lexical Scope",
+  "description": "Where scope is decided, shadowing and closures",
+  "questions": [
+    {
+      "id": "lexical-scope-1",
+      "prompt": "When is lexical scope determined?",
+      "options": [
+        "At runtime, each time a function is called",
+        "At author time, by where functions and blocks are written in the code",
+        "When the function is first assigned to a variable",
+        "When the garbage collector runs"
+      ],
+      "answerIndex": 1,
+      "explanation": "Lexical scope is defined at lexing/author time: the nesting of functions and blocks in your source code decides which variables each piece of code can see. Where or how a function is later called does not change it (with the exception of cheats like eval and with).",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch2.md"
+    },
+    {
+      "id": "lexical-scope-2",
+      "prompt": "What does this code log?",
+      "code": "const x = 'global';\nfunction outer() {\n  const x = 'outer';\n  function inner() {\n    console.log(x);\n  }\n  return inner;\n}\nconst fn = outer();\nfn();",
+      "options": [
+        "'global'",
+        "'outer'",
+        "undefined",
+        "ReferenceError"
+      ],
+      "answerIndex": 1,
+      "explanation": "inner was written inside outer, so its scope chain is inner → outer → global, regardless of where fn() is called. The look-up for x stops at the first match, outer's x.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch2.md"
+    },
+    {
+      "id": "lexical-scope-3",
+      "prompt": "What is it called when an inner scope declares a variable with the same name as one in an outer scope?",
+      "options": [
+        "Hoisting",
+        "Shadowing",
+        "Currying",
+        "Bubbling"
+      ],
+      "answerIndex": 1,
+      "explanation": "The inner variable shadows the outer one: scope look-up stops at the first match, so inside the inner scope the outer variable with that name is unreachable by its plain name.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch3.md"
+    },
+    {
+      "id": "lexical-scope-4",
+      "prompt": "What does this code log?",
+      "code": "function show() {\n  console.log(value);\n}\nfunction run() {\n  const value = 42;\n  show();\n}\nrun();",
+      "options": [
+        "42",
+        "undefined",
+        "ReferenceError: value is not defined",
+        "null"
+      ],
+      "answerIndex": 2,
+      "explanation": "show was declared at the top level, so its scope chain is show → global. The value inside run is not visible to it, because JavaScript uses lexical (not dynamic) scope. The RHS look-up fails and throws a ReferenceError.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch2.md"
+    },
+    {
+      "id": "lexical-scope-5",
+      "prompt": "What does this code log?",
+      "code": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}",
+      "options": [
+        "0 1 2",
+        "3 3 3",
+        "0 0 0",
+        "undefined undefined undefined"
+      ],
+      "answerIndex": 1,
+      "explanation": "var is function-scoped (here: global), so there is only one i, shared by all three callbacks. By the time the timers fire the loop has finished and i is 3. Declaring the loop variable with let creates a fresh binding per iteration and logs 0 1 2 — prefer let/const in modern code.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "lexical-scope-6",
+      "prompt": "Which statement about let and const is true?",
+      "options": [
+        "They are function-scoped like var",
+        "They are block-scoped and cannot be accessed before their declaration (temporal dead zone)",
+        "They are not hoisted at all and are always undefined before declaration",
+        "They automatically create properties on the global object"
+      ],
+      "answerIndex": 1,
+      "explanation": "let and const are block-scoped. Their declarations are hoisted, but the binding stays uninitialized until the declaration runs; accessing it earlier (the temporal dead zone) throws a ReferenceError. Unlike top-level var, they do not create properties on window/globalThis.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch5.md"
+    },
+    {
+      "id": "lexical-scope-7",
+      "prompt": "What is a closure?",
+      "options": [
+        "A function that has finished executing",
+        "A function together with access to the variables of the scope it was defined in, even after that scope has returned",
+        "A way to make object properties private using Symbol",
+        "A block of code wrapped in curly braces"
+      ],
+      "answerIndex": 1,
+      "explanation": "A closure is a function that keeps access to its lexical scope even when executed outside of it. That is why a returned inner function can still read and update variables of the outer function that already returned.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "lexical-scope-8",
+      "prompt": "What does this code log?",
+      "code": "function counter() {\n  let count = 0;\n  return () => ++count;\n}\nconst a = counter();\nconst b = counter();\na(); a();\nconsole.log(a(), b());",
+      "options": [
+        "3 1",
+        "1 1",
+        "3 3",
+        "2 1"
+      ],
+      "answerIndex": 0,
+      "explanation": "Each call to counter() creates a new scope with its own count. a has been called three times (the third call is inside console.log) so it returns 3, while b's separate count returns 1.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md"
+    },
+    {
+      "id": "lexical-scope-9",
+      "prompt": "Why is using eval() or with considered bad for scope?",
+      "options": [
+        "They are not supported in modern browsers",
+        "They modify lexical scope at runtime, which defeats engine optimizations and makes code hard to reason about",
+        "They only work in strict mode",
+        "They make all variables global constants"
+      ],
+      "answerIndex": 1,
+      "explanation": "eval can inject declarations into the current scope and with creates a scope from an object at runtime. Because the engine can no longer know scopes ahead of time, it must skip many optimizations. with is forbidden in strict mode, and strict-mode eval gets its own scope.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    }
+  ]
+}
