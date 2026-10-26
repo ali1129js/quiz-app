@@ -23,6 +23,7 @@ export function DeckPicker({ decks, best, onStart }: Props) {
         Shuffle questions and answers
       </label>
 
+      <div className="deck-groups">
       {groupDecks(decks).map((group) => (
         <section key={group.book} className="deck-group" aria-label={group.book}>
           <h3 className="group-title">{group.book}</h3>
@@ -45,6 +46,7 @@ export function DeckPicker({ decks, best, onStart }: Props) {
           </ul>
         </section>
       ))}
+      </div>
       <p className="muted small">
         Topics follow Kyle Simpson&apos;s{" "}
         <a href="https://github.com/getify/You-Dont-Know-JS/tree/2nd-ed">You Don&apos;t Know JS Yet</a> (2nd ed.). Questions

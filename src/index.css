@@ -124,3 +124,9 @@ main { padding-bottom: 1rem; }
 .theme-btn { all: unset; cursor: pointer; width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 99px; color: var(--muted); font-size: 1rem; }
 .theme-btn[aria-pressed="true"] { background: var(--card-hover); color: #fff; }
 .theme-btn:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 1px; }
+
+.deck-groups { display: grid; gap: 0 2rem; align-items: start; }
+@media (min-width: 720px) { .deck-groups { grid-template-columns: 1fr 1fr; } .app { max-width: 1040px; } }
+.deck-group .group-title { margin-top: 0; }
+article.card-3d:focus-visible, section.card-3d:focus-visible { transform: translateY(-4px); }
+@media (hover: hover) { article.card-3d:hover, section.card-3d:hover { transform: translateY(-4px); } }
