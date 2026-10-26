@@ -1,0 +1,153 @@
+{
+  "id": "scope",
+  "book": "Classic decks",
+  "title": "Scope & Compilation",
+  "description": "How the engine, compiler and scope cooperate",
+  "questions": [
+    {
+      "id": "scope-1",
+      "prompt": "What gives a program state?",
+      "options": [
+        "The ability to run at all",
+        "The ability to be compiled",
+        "The ability to store values in variables and read them back later",
+        "Building an abstract syntax tree"
+      ],
+      "answerIndex": 2,
+      "explanation": "State is the data a program remembers between steps. Variables are the basic mechanism: you put a value in, and later code reads or changes it. Without them a program could only compute one-off results.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-2",
+      "prompt": "In a classic compiler pipeline, what is the order of the three main steps before code runs?",
+      "options": [
+        "Tokenizing/lexing → parsing → code generation",
+        "Tokenizing/lexing → code generation → parsing",
+        "Parsing → code generation → tokenizing/lexing",
+        "Code generation → tokenizing/lexing → parsing"
+      ],
+      "answerIndex": 0,
+      "explanation": "Source text is first split into tokens (lexing), the tokens are then arranged into a syntax tree (parsing), and finally that tree is turned into something executable (code generation). Each step needs the output of the previous one.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-3",
+      "prompt": "During which step is a string of source characters split into meaningful chunks such as keywords, identifiers and operators?",
+      "options": [
+        "Code generation",
+        "Parsing",
+        "Execution",
+        "Tokenizing/lexing"
+      ],
+      "answerIndex": 3,
+      "explanation": "Splitting raw characters into tokens like let, x, = and 2 is the job of the tokenizer/lexer. Parsing only starts once those tokens exist.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-4",
+      "prompt": "What is scope responsible for?",
+      "options": [
+        "Parsing and generating code",
+        "Tracking which variables are declared where and deciding which code can access them",
+        "Running the whole program from start to finish",
+        "Turning tokens into a syntax tree"
+      ],
+      "answerIndex": 1,
+      "explanation": "Scope is the set of rules (and the bookkeeping) for where identifiers live and who can see them. Parsing and code generation are compiler tasks; running the program is the engine's job.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-5",
+      "prompt": "How is a declaration-with-assignment like the one below handled?",
+      "code": "let a = 2;",
+      "options": [
+        "Declaring and assigning happen at the same moment, during execution only",
+        "The variable is re-declared every time the line runs",
+        "First, during compilation, the variable is declared in its scope (if not already); later, during execution, the engine finds it and assigns the value",
+        "The value is assigned during compilation, and the variable is declared when the line runs"
+      ],
+      "answerIndex": 2,
+      "explanation": "JavaScript is parsed and compiled before it runs. The declaration part (let a) is processed up front, registering a in the current scope; the = 2 part is a normal assignment performed when execution reaches that line. That split is what makes hoisting and the temporal dead zone possible.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-6",
+      "prompt": "When the engine needs a variable, where does the lookup start?",
+      "options": [
+        "In the global scope",
+        "In the outermost function scope",
+        "In the scope of the code that is currently running, then moving outward",
+        "In the scope where the variable was last assigned"
+      ],
+      "answerIndex": 2,
+      "explanation": "Lookup begins in the current scope. If the name isn't found there, the engine moves to the enclosing scope, and so on outward until it reaches the global scope. It never searches inward into nested scopes.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch3.md"
+    },
+    {
+      "id": "scope-7",
+      "prompt": "Why does it matter whether a variable reference is a target (being assigned to, \"LHS\") or a source (being read, \"RHS\")?",
+      "options": [
+        "They differ only for variables holding undefined",
+        "They differ only for global vs. local variables",
+        "They behave differently when the variable cannot be found in any scope",
+        "They don't — both always throw the same error"
+      ],
+      "answerIndex": 2,
+      "explanation": "If a source/read reference can't be found anywhere, a ReferenceError is thrown. If a target/assignment reference can't be found, sloppy (non-strict) mode silently creates a new global variable, while strict mode throws a ReferenceError. That accidental-global behaviour is a big reason to use strict mode (modules and classes are strict automatically).",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-8",
+      "prompt": "What is parsing?",
+      "options": [
+        "Turning a string into tokens",
+        "Turning a stream of tokens into an abstract syntax tree (AST)",
+        "Turning source code into assembly",
+        "Turning an AST into machine code"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lexer produces tokens; the parser takes that flat token list and builds a tree describing the program's structure (the AST). Code generation later turns the tree into executable form.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-9",
+      "prompt": "Which best describes the job of a JavaScript engine such as V8 or SpiderMonkey?",
+      "options": [
+        "Removing unused code before deployment",
+        "Filling in code missing from your files",
+        "Formatting and linting your code",
+        "Compiling and executing your JavaScript program from start to finish"
+      ],
+      "answerIndex": 3,
+      "explanation": "An engine takes your source and handles everything needed to run it — parsing, compiling (often JIT-compiling hot code) and executing. Chrome and Node use V8, Firefox uses SpiderMonkey, Safari uses JavaScriptCore. Minifiers and linters are separate tools.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch1.md"
+    },
+    {
+      "id": "scope-10",
+      "prompt": "In the code below, which statement describes how the two variables are looked up?",
+      "code": "let a;\nconst b = 1;\na = b;",
+      "options": [
+        "a is looked up as a target (where to store a value); b is looked up as a source (to read its value)",
+        "Both are looked up as sources",
+        "a is looked up to read its old value; b is looked up to find its container",
+        "Neither is looked up until the program finishes"
+      ],
+      "answerIndex": 0,
+      "explanation": "For an assignment, the left side is a target: the engine needs the variable itself so it can store something there. The right side is a source: the engine only needs the current value of b.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    },
+    {
+      "id": "scope-11",
+      "prompt": "If reading a variable fails because it isn't declared in any reachable scope, which error is thrown?",
+      "options": [
+        "ReferenceError",
+        "SyntaxError",
+        "EvalError",
+        "TypeError"
+      ],
+      "answerIndex": 0,
+      "explanation": "Reading an undeclared name throws ReferenceError (e.g. \"x is not defined\"). A TypeError is different: the variable was found, but you did something impossible with its value, such as calling undefined as a function.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch1.md"
+    }
+  ]
+}

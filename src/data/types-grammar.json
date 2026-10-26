@@ -1,0 +1,175 @@
+{
+  "id": "types-grammar",
+  "book": "You Don't Know JS Yet",
+  "title": "Types & Grammar",
+  "description": "Primitives, coercion and equality",
+  "questions": [
+    {
+      "id": "tg-1",
+      "prompt": "How many primitive types does JavaScript have (as of ES2020+)?",
+      "options": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "answerIndex": 2,
+      "explanation": "The seven primitives are string, number, bigint, boolean, undefined, null and symbol. Everything else — arrays, functions, dates — is an object.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "tg-2",
+      "prompt": "What does this log?",
+      "code": "console.log(0.1 + 0.2, 0.1 + 0.2 === 0.3);",
+      "options": [
+        "0.3 true",
+        "0.30000000000000004 false",
+        "0.3 false",
+        "NaN false"
+      ],
+      "answerIndex": 1,
+      "explanation": "Numbers are IEEE-754 binary floating point, which can't represent 0.1 or 0.2 exactly, so the sum is slightly off. Compare with a tolerance, e.g. Math.abs(a - b) < Number.EPSILON, or work in integers (cents).",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "tg-3",
+      "prompt": "What does this log?",
+      "code": "console.log(NaN === NaN, Number.isNaN(NaN));",
+      "options": [
+        "true true",
+        "false true",
+        "false false",
+        "true false"
+      ],
+      "answerIndex": 1,
+      "explanation": "NaN is the only value that is not equal to itself, so === returns false. Use Number.isNaN(x) or Object.is(x, NaN) to detect it.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "tg-4",
+      "prompt": "What does this log?",
+      "code": "// non-strict script\nvar s = 'hello';\ns[0] = 'H';\nconsole.log(s);",
+      "options": [
+        "\"hello\"",
+        "\"Hello\"",
+        "TypeError",
+        "undefined"
+      ],
+      "answerIndex": 0,
+      "explanation": "Strings are immutable primitives. Assigning to an index is silently ignored in sloppy mode (and throws a TypeError in strict mode); you have to build a new string instead, e.g. 'H' + s.slice(1).",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch2.md"
+    },
+    {
+      "id": "tg-5",
+      "prompt": "What does this log?",
+      "code": "console.log('1' + 2, '4' - 1);",
+      "options": [
+        "\"12\" 3",
+        "3 \"12\"",
+        "\"12\" \"12\"",
+        "3 3"
+      ],
+      "answerIndex": 0,
+      "explanation": "With +, if either operand is a string the other is coerced to a string and they are concatenated, so '1' + 2 is \"12\". The - operator only does math, so the string '4' is coerced to the number 4 and the result is 3.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch4.md"
+    },
+    {
+      "id": "tg-6",
+      "prompt": "What does this log?",
+      "code": "console.log(42 == '42', 42 === '42');",
+      "options": [
+        "true true",
+        "true false",
+        "false false",
+        "false true"
+      ],
+      "answerIndex": 1,
+      "explanation": "== allows coercion: the string '42' is converted to the number 42, so they are equal. === compares without coercion, and a string is never strictly equal to a number.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch4.md"
+    },
+    {
+      "id": "tg-7",
+      "prompt": "What does this log?",
+      "code": "console.log(null == undefined, null === undefined);",
+      "options": [
+        "true true",
+        "false false",
+        "true false",
+        "false true"
+      ],
+      "answerIndex": 2,
+      "explanation": "null and undefined are loosely equal only to each other (and themselves) under ==, which makes x == null a handy check for both. They are different types, so === is false.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch4.md"
+    },
+    {
+      "id": "tg-8",
+      "prompt": "What does this log?",
+      "code": "console.log([] == false, ![]);",
+      "options": [
+        "false false",
+        "true true",
+        "true false",
+        "false true"
+      ],
+      "answerIndex": 2,
+      "explanation": "== with an object first converts it to a primitive: [] becomes \"\", which becomes 0, and false also becomes 0 — so [] == false is true. But in a boolean context every object, including [], is truthy, so Boolean([]) is true and ![] is false.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch4.md"
+    },
+    {
+      "id": "tg-9",
+      "prompt": "What does this log?",
+      "code": "console.log(Object.is(NaN, NaN), Object.is(0, -0));",
+      "options": [
+        "true false",
+        "false true",
+        "true true",
+        "false false"
+      ],
+      "answerIndex": 0,
+      "explanation": "Object.is is like === except for two edge cases: it treats NaN as equal to NaN and distinguishes +0 from -0. So Object.is(NaN, NaN) is true and Object.is(0, -0) is false.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "tg-10",
+      "prompt": "What does this log?",
+      "code": "console.log(Number('42'), Number('42px'), Number(''));",
+      "options": [
+        "42 NaN 0",
+        "42 NaN NaN",
+        "42 0 0",
+        "\"42\" NaN 0"
+      ],
+      "answerIndex": 0,
+      "explanation": "Number() converts the whole string: '42' → 42 and '42px' → NaN. An empty string (and whitespace-only strings) converts to 0, a classic surprise. parseInt('42px') would give 42 because it stops at the first non-digit.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch4.md"
+    },
+    {
+      "id": "tg-11",
+      "prompt": "What does this log?",
+      "code": "console.log(typeof Symbol('id'), Symbol('id') === Symbol('id'));",
+      "options": [
+        "\"symbol\" false",
+        "\"string\" true",
+        "\"symbol\" true",
+        "\"object\" false"
+      ],
+      "answerIndex": 0,
+      "explanation": "Symbol() always creates a new, unique primitive value, even with the same description, so two symbols are never equal. Symbol.for('id') would instead return a shared symbol from a global registry.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    },
+    {
+      "id": "tg-12",
+      "prompt": "What does this log?",
+      "code": "console.log(typeof 42n, 1n + 2n);",
+      "options": [
+        "\"number\" TypeError",
+        "\"bigint\" 3n",
+        "\"bigint\" TypeError",
+        "\"number\" 3"
+      ],
+      "answerIndex": 1,
+      "explanation": "42n is a bigint literal. BigInts support normal arithmetic with other bigints (1n + 2n is 3n), but mixing a bigint and a number, e.g. 1n + 2, throws a TypeError.",
+      "source": "https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/types-grammar/ch1.md"
+    }
+  ]
+}
