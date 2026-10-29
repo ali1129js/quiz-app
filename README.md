@@ -4,7 +4,7 @@ A JavaScript concepts quiz: pick a deck, answer multiple-choice questions, read 
 
 **Live:** https://ali1129js.github.io/quiz-app/
 
-> The live site still shows the 2019 version until this rebuild is merged and Pages is switched to "GitHub Actions" (see [Deployment](#deployment)).
+Tag: Rebuilt (original 2019), AI pair-programmed 2026
 
 ## Features
 
