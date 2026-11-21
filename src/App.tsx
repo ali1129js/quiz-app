@@ -7,6 +7,7 @@ import { DeckPicker } from "./components/DeckPicker";
 import { QuestionCard } from "./components/QuestionCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { Results } from "./components/Results";
+import { MotionToggle } from "./components/MotionToggle";
 import { ThemeToggle } from "./components/ThemeToggle";
 
 function prepare(deck: Deck, shuffled: boolean) {
@@ -48,7 +49,10 @@ export default function App() {
         </h1>
         <div className="header-right">
           {deck && <p className="deck-label">{deck.title}</p>}
-          <ThemeToggle />
+          <div className="theme-tools">
+            <ThemeToggle />
+            <MotionToggle />
+          </div>
         </div>
       </header>
 

@@ -1,38 +1,32 @@
 import { useEffect, useState } from "react";
-import { applyTheme, loadThemePref, saveThemePref, type ThemePref } from "../theme";
-
-const OPTIONS: { value: ThemePref; label: string; icon: string }[] = [
-  { value: "system", label: "System theme", icon: "🖥" },
-  { value: "light", label: "Light theme", icon: "☀" },
-  { value: "dark", label: "Dark theme", icon: "☾" },
-];
+import {
+  THEME_LABELS,
+  THEME_NAMES,
+  applyTheme,
+  loadThemePref,
+  saveThemePref,
+  type ThemeName,
+} from "../theme";
 
 export function ThemeToggle() {
-  const [pref, setPref] = useState<ThemePref>(() => loadThemePref());
+  const [theme, setTheme] = useState<ThemeName>(() => loadThemePref());
 
   useEffect(() => {
-    applyTheme(pref);
-    saveThemePref(pref);
-    if (pref !== "system" || typeof matchMedia !== "function") return;
-    const mq = matchMedia("(prefers-color-scheme: light)");
-    const onChange = () => applyTheme("system");
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, [pref]);
+    applyTheme(theme);
+    saveThemePref(theme);
+  }, [theme]);
 
   return (
-    <div className="theme-toggle" role="group" aria-label="Color theme">
-      {OPTIONS.map((o) => (
+    <div className="segmented wrap" role="group" aria-label="Theme">
+      {THEME_NAMES.map((name) => (
         <button
-          key={o.value}
+          key={name}
           type="button"
-          className="theme-btn"
-          aria-pressed={pref === o.value}
-          aria-label={o.label}
-          title={o.label}
-          onClick={() => setPref(o.value)}
+          className="segment"
+          aria-pressed={theme === name}
+          onClick={() => setTheme(name)}
         >
-          <span aria-hidden="true">{o.icon}</span>
+          {THEME_LABELS[name]}
         </button>
       ))}
     </div>
