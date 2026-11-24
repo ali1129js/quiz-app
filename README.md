@@ -6,6 +6,28 @@ A JavaScript concepts quiz: pick a deck, answer multiple-choice questions, read 
 
 Tag: Rebuilt (original 2019), AI pair-programmed 2026
 
+## Screenshots
+
+Desktop (1280px). Motion is off (the default). Khaki is the light theme; Graphite is the dark grey one.
+
+**Deck picker, Khaki**
+
+![The deck picker in Khaki, showing the seven JavaScript decks grouped by book](docs/picker-khaki-1280.png)
+
+**Deck picker, Graphite**
+
+![The deck picker in Graphite](docs/picker-graphite-1280.png)
+
+**A question, Khaki**
+
+![A multiple-choice question in Khaki, with the options still unanswered](docs/question-khaki-1280.png)
+
+**A question, Graphite**
+
+![The same question in Graphite](docs/question-graphite-1280.png)
+
+See [docs/LEARN.md](docs/LEARN.md) for how the pure quiz reducer, startup deck validation, and best-score storage work.
+
 ## Features
 
 - 7 decks, 74 questions, grouped by book:
@@ -18,7 +40,7 @@ Tag: Rebuilt (original 2019), AI pair-programmed 2026
 - An optional shuffle for both questions and answers
 - Your best score for each deck, saved in `localStorage`
 - Accessible: real `<button>` options, full keyboard support, focus moved on each step, a live region for feedback, and visible focus rings
-- Responsive layout with light/dark mode that follows the OS setting, and respect for reduced-motion settings
+- Three gloss themes (Khaki, Graphite, Midnight). The first visit follows the operating system. An optional slow background motion stays off by default and is forced off when you prefer reduced motion.
 
 ## Stack
 
