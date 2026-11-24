@@ -3,13 +3,21 @@ import type { Deck } from "../types";
 import type { BestScores } from "../storage";
 import { groupDecks } from "../decks";
 
+export interface ResumeOffer {
+  deckTitle: string;
+  index: number;
+  total: number;
+}
+
 interface Props {
   decks: readonly Deck[];
   best: BestScores;
+  resume?: ResumeOffer | null;
+  onResume?: () => void;
   onStart: (deckId: string, shuffled: boolean) => void;
 }
 
-export function DeckPicker({ decks, best, onStart }: Props) {
+export function DeckPicker({ decks, best, resume, onResume, onStart }: Props) {
   const [shuffled, setShuffled] = useState(false);
   const shuffleId = useId();
 
@@ -17,6 +25,17 @@ export function DeckPicker({ decks, best, onStart }: Props) {
     <section className="picker" aria-labelledby="picker-title">
       <h2 id="picker-title">Choose a deck</h2>
       <p className="muted">Test your understanding of core JavaScript concepts. Every answer comes with an explanation.</p>
+
+      {resume && onResume ? (
+        <div className="resume" role="region" aria-label="Unfinished quiz">
+          <p>
+            You have an unfinished quiz: {resume.deckTitle} (question {resume.index + 1} of {resume.total}).
+          </p>
+          <button type="button" className="btn primary" onClick={onResume}>
+            Resume
+          </button>
+        </div>
+      ) : null}
 
       <label className="toggle" htmlFor={shuffleId}>
         <input id={shuffleId} type="checkbox" checked={shuffled} onChange={(e) => setShuffled(e.target.checked)} />

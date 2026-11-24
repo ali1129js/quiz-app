@@ -76,3 +76,30 @@ describe("shuffle", () => {
     }
   });
 });
+
+
+describe("resume", () => {
+  it("restores an in-progress run and ignores a finished-shaped payload", () => {
+    const answers: (number | null)[] = [1, null];
+    const resumed = quizReducer(initialState, {
+      type: "resume",
+      deckId: "d",
+      shuffled: true,
+      questions: qs,
+      index: 1,
+      answers,
+    });
+    expect(resumed).toMatchObject({ status: "playing", deckId: "d", shuffled: true, index: 1, answers });
+
+    expect(
+      quizReducer(initialState, {
+        type: "resume",
+        deckId: "d",
+        shuffled: false,
+        questions: qs,
+        index: qs.length,
+        answers,
+      }),
+    ).toEqual(initialState);
+  });
+});

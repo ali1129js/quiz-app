@@ -3,6 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 import { getDeck } from "../decks";
+import { IN_PROGRESS_KEY, loadInProgress } from "../storage";
 
 const lexical = getDeck("lexical-scope")!;
 const basics = getDeck("basics")!;
@@ -58,5 +59,30 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: /back to deck selection/ }));
     expect(screen.getByRole("button", { name: /JS Basics/ })).toHaveTextContent(`Best: ${total - 1}/${total}`);
+    expect(screen.queryByRole("button", { name: "Resume" })).not.toBeInTheDocument();
+    expect(loadInProgress()).toBeNull();
+  });
+
+  it("offers Resume for an unfinished deck, restores progress, and clears on quit", async () => {
+    const user = userEvent.setup();
+    const first = render(<App />);
+    await user.click(screen.getByRole("button", { name: /JS Basics/ }));
+    const q = basics.questions[0]!;
+    await user.click(screen.getByRole("button", { name: q.options[q.answerIndex]! }));
+    await user.click(screen.getByRole("button", { name: "Next question" }));
+    expect(screen.getByText(`Question 2 of ${basics.questions.length}`)).toBeInTheDocument();
+    expect(loadInProgress()?.index).toBe(1);
+    first.unmount();
+
+    render(<App />);
+    expect(screen.getByRole("region", { name: "Unfinished quiz" })).toHaveTextContent(/JS Basics/);
+    expect(screen.getByRole("region", { name: "Unfinished quiz" })).toHaveTextContent(/question 2 of/);
+    await user.click(screen.getByRole("button", { name: "Resume" }));
+    expect(screen.getByText(`Question 2 of ${basics.questions.length}`)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /back to deck selection/ }));
+    expect(loadInProgress()).toBeNull();
+    expect(screen.queryByRole("button", { name: "Resume" })).not.toBeInTheDocument();
+    expect(localStorage.getItem(IN_PROGRESS_KEY)).toBeNull();
   });
 });

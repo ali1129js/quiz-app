@@ -43,6 +43,7 @@ export type QuizAction =
   | { type: "answer"; optionIndex: number }
   | { type: "next" }
   | { type: "restart"; questions: Question[] }
+  | { type: "resume"; deckId: string; shuffled: boolean; questions: Question[]; index: number; answers: (number | null)[] }
   | { type: "quit" };
 
 export const initialState: QuizState = { status: "idle" };
@@ -80,6 +81,23 @@ export function quizReducer(state: QuizState, action: QuizAction): QuizState {
         questions: action.questions,
         index: 0,
         answers: action.questions.map(() => null),
+      };
+    case "resume":
+      if (
+        action.questions.length === 0 ||
+        action.answers.length !== action.questions.length ||
+        action.index < 0 ||
+        action.index >= action.questions.length
+      ) {
+        return state;
+      }
+      return {
+        status: "playing",
+        deckId: action.deckId,
+        shuffled: action.shuffled,
+        questions: action.questions,
+        index: action.index,
+        answers: action.answers,
       };
     case "quit":
       return initialState;

@@ -1,8 +1,16 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { DECKS, getDeck } from "./decks";
 import { initialState, quizReducer, score, shuffleQuestions } from "./quiz";
-import { loadBestScores, recordScore, type BestScores } from "./storage";
-import type { Deck } from "./types";
+import {
+  clearInProgress,
+  loadBestScores,
+  loadInProgress,
+  recordScore,
+  saveInProgress,
+  type BestScores,
+  type InProgressRun,
+} from "./storage";
+import type { Deck, Question } from "./types";
 import { DeckPicker } from "./components/DeckPicker";
 import { QuestionCard } from "./components/QuestionCard";
 import { ProgressBar } from "./components/ProgressBar";
@@ -10,14 +18,47 @@ import { Results } from "./components/Results";
 import { MotionToggle } from "./components/MotionToggle";
 import { ThemeToggle } from "./components/ThemeToggle";
 
+
+function toQuestion(question: InProgressRun["questions"][number]): Question {
+  const next: Question = {
+    id: question.id,
+    prompt: question.prompt,
+    options: question.options,
+    answerIndex: question.answerIndex,
+    explanation: question.explanation,
+    source: question.source,
+  };
+  if (question.code !== undefined) next.code = question.code;
+  return next;
+}
+
 function prepare(deck: Deck, shuffled: boolean) {
   return shuffled ? shuffleQuestions(deck.questions) : deck.questions;
+}
+
+function usableResume(run: InProgressRun | null): InProgressRun | null {
+  if (!run || !getDeck(run.deckId)) return null;
+  return run;
 }
 
 export default function App() {
   const [state, dispatch] = useReducer(quizReducer, initialState);
   const [best, setBest] = useState<BestScores>(() => loadBestScores());
   const [newBest, setNewBest] = useState(false);
+  const [resume, setResume] = useState<InProgressRun | null>(() => usableResume(loadInProgress()));
+
+  useEffect(() => {
+    if (state.status !== "playing") return;
+    const run = {
+      deckId: state.deckId,
+      shuffled: state.shuffled,
+      questions: state.questions,
+      index: state.index,
+      answers: state.answers,
+    };
+    saveInProgress(run);
+    setResume(run);
+  }, [state]);
 
   const start = (deckId: string, shuffled: boolean) => {
     const deck = getDeck(deckId);
@@ -26,24 +67,33 @@ export default function App() {
     dispatch({ type: "start", deckId, shuffled, questions: prepare(deck, shuffled) });
   };
 
+  const quit = () => {
+    clearInProgress();
+    setResume(null);
+    dispatch({ type: "quit" });
+  };
+
   const next = () => {
     if (state.status !== "playing") return;
     if (state.index === state.questions.length - 1 && state.answers[state.index] !== null) {
       const isBest = recordScore(state.deckId, score(state.questions, state.answers), state.questions.length);
       setNewBest(isBest);
       setBest(loadBestScores());
+      clearInProgress();
+      setResume(null);
     }
     dispatch({ type: "next" });
   };
 
   const deck = state.status === "idle" ? undefined : getDeck(state.deckId);
   const current = state.status === "playing" ? state.questions[state.index] : undefined;
+  const resumeDeck = resume ? getDeck(resume.deckId) : undefined;
 
   return (
     <div className="app">
       <header className="app-header">
         <h1>
-          <button type="button" className="brand" onClick={() => dispatch({ type: "quit" })} aria-label="JS Quiz – back to deck selection">
+          <button type="button" className="brand" onClick={quit} aria-label="JS Quiz – back to deck selection">
             <span aria-hidden="true">{"{ }"}</span> JS Quiz
           </button>
         </h1>
@@ -57,7 +107,31 @@ export default function App() {
       </header>
 
       <main>
-        {state.status === "idle" && <DeckPicker decks={DECKS} best={best} onStart={start} />}
+        {state.status === "idle" && (
+          <DeckPicker
+            decks={DECKS}
+            best={best}
+            onStart={start}
+            {...(resume && resumeDeck
+              ? {
+                  resume: {
+                    deckTitle: resumeDeck.title,
+                    index: resume.index,
+                    total: resume.questions.length,
+                  },
+                  onResume: () =>
+                    dispatch({
+                      type: "resume",
+                      deckId: resume.deckId,
+                      shuffled: resume.shuffled,
+                      questions: resume.questions.map(toQuestion),
+                      index: resume.index,
+                      answers: resume.answers,
+                    }),
+                }
+              : {})}
+          />
+        )}
 
         {state.status === "playing" && (
           <>
@@ -91,7 +165,7 @@ export default function App() {
               setNewBest(false);
               dispatch({ type: "restart", questions: prepare(deck, state.shuffled) });
             }}
-            onChooseDeck={() => dispatch({ type: "quit" })}
+            onChooseDeck={quit}
           />
         )}
       </main>
