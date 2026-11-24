@@ -8,16 +8,24 @@
     <title>JS Quiz</title>
     <script>
       (function () {
-        var p = "system";
-        try { p = localStorage.getItem("quiz-app:theme:v1") || "system"; } catch (e) {}
-        if (p !== "light" && p !== "dark") p = "system";
-        var t = p === "system" ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : p;
+        var known = { khaki: 1, graphite: 1, midnight: 1 };
+        var t = null;
+        try { t = localStorage.getItem("quiz-app:theme:v1"); } catch (e) {}
+        if (t === "light") t = "khaki";
+        else if (t === "dark") t = "graphite";
+        if (!known[t]) {
+          t = matchMedia("(prefers-color-scheme: dark)").matches ? "graphite" : "khaki";
+        }
         document.documentElement.dataset.theme = t;
-        document.documentElement.dataset.themePref = p;
+        var m = "static";
+        try { m = localStorage.getItem("quiz-app:motion:v1") || "static"; } catch (e) {}
+        if (m !== "animated") m = "static";
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) m = "static";
+        document.documentElement.dataset.motion = m;
       })();
     </script>
-    <script type="module" crossorigin src="/quiz-app/assets/index-DlL5LDIu.js"></script>
-    <link rel="stylesheet" crossorigin href="/quiz-app/assets/index-Ctl-CP_l.css">
+    <script type="module" crossorigin src="/quiz-app/assets/index-C0sdLzSd.js"></script>
+    <link rel="stylesheet" crossorigin href="/quiz-app/assets/index-C2hlNPmh.css">
   </head>
   <body>
     <div id="root"></div>
