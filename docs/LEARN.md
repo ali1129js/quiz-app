@@ -10,7 +10,7 @@ See `src/quiz.ts` and `src/test/quiz.test.ts`.
 
 ## Decks are validated at startup
 
-A typo in a JSON deck (a missing option, a broken `answerIndex`, a non-https source link) would otherwise fail only when a learner reached that question. `parseDeck` in `src/decks.ts` checks every question when the module loads, and the test suite runs the same check on all seven decks. Invalid data throws immediately, so a bad question cannot ship.
+A typo in a JSON deck (a missing option, a broken `answerIndex`, a non-https source link) would otherwise fail only when a learner reached that question. `parseDeck` in `src/decks.ts` checks every question when the module loads, and the test suite runs the same check on all eight decks. Invalid data throws immediately, so a bad question cannot ship.
 
 See `src/decks.ts` and `src/test/decks.test.ts`.
 

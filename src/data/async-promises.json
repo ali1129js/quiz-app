@@ -1,0 +1,138 @@
+{
+  "id": "async-promises",
+  "book": "JavaScript concepts",
+  "title": "Async / Promises",
+  "description": "Promises, async/await, and how work is scheduled on the event loop",
+  "questions": [
+    {
+      "id": "async-1",
+      "prompt": "What does a JavaScript Promise stand for?",
+      "options": [
+        "A function that is guaranteed to run after 0 milliseconds",
+        "A separate thread that runs JavaScript in parallel with the page",
+        "A placeholder for a value that will be available later, if the work succeeds or fails",
+        "A callback that must be named then"
+      ],
+      "answerIndex": 2,
+      "explanation": "A Promise is an object for the eventual result of an asynchronous operation: it either fulfills with a value or rejects with a reason. It is not a thread; ordinary JavaScript still runs on one main thread. setTimeout is a timer, not the definition of a Promise.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
+    },
+    {
+      "id": "async-2",
+      "prompt": "What value does the last promise in this chain fulfill with?",
+      "code": "Promise.resolve(2)\n  .then((n) => n + 3)\n  .then((n) => n * 2)",
+      "options": ["2", "5", "7", "10"],
+      "answerIndex": 3,
+      "explanation": "Each then callback receives the fulfillment value of the previous step and can return the next value. 2 plus 3 is 5, and 5 times 2 is 10.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then"
+    },
+    {
+      "id": "async-3",
+      "prompt": "What do you get back when you call an async function?",
+      "options": [
+        "The raw return value, never wrapped",
+        "undefined, because asynchronous work cannot return a value",
+        "Always a Promise: a non-promise return is wrapped, and a thrown error becomes a rejection",
+        "A generator object that you must call next() on"
+      ],
+      "answerIndex": 2,
+      "explanation": "An async function always returns a Promise. return 42 becomes a promise that fulfills with 42, and throw new Error('x') becomes a promise that rejects with that error. The caller can await it or attach then/catch.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"
+    },
+    {
+      "id": "async-4",
+      "prompt": "If load is an async function that returns 42, what is the value of result after this line finishes?",
+      "code": "const result = await load();",
+      "options": [
+        "a Promise that is still pending",
+        "42",
+        "Promise { 42 }",
+        "undefined"
+      ],
+      "answerIndex": 1,
+      "explanation": "await pauses the surrounding async function until the promise settles, then unwraps the fulfillment value. So result is 42, not a Promise object. If the promise rejected, await would throw and you could catch it with try/catch.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await"
+    },
+    {
+      "id": "async-5",
+      "prompt": "You pass three promises to Promise.all. One of them rejects while the others are still pending. What happens?",
+      "options": [
+        "Promise.all waits for every promise, then returns a mix of values and errors",
+        "Promise.all rejects as soon as that one promise rejects",
+        "The rejection is ignored and the other values are returned",
+        "Promise.all retries the failed promise once"
+      ],
+      "answerIndex": 1,
+      "explanation": "Promise.all is fail-fast: it fulfills only when every input fulfills, and it rejects at the first rejection. If you need every outcome, use Promise.allSettled, which waits for all of them and reports fulfilled or rejected for each.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all"
+    },
+    {
+      "id": "async-6",
+      "prompt": "After this code runs to completion, what is the order of values in the array?",
+      "code": "const order = [];\nsetTimeout(() => order.push(\"timeout\"), 0);\nPromise.resolve().then(() => order.push(\"then\"));\norder.push(\"sync\");",
+      "options": [
+        "[\"timeout\", \"then\", \"sync\"]",
+        "[\"sync\", \"then\", \"timeout\"]",
+        "[\"sync\", \"timeout\", \"then\"]",
+        "[\"then\", \"sync\", \"timeout\"]"
+      ],
+      "answerIndex": 1,
+      "explanation": "The current script runs first, so \"sync\" is pushed immediately. Promise reactions are microtasks and run before the next task, so \"then\" comes next. setTimeout(..., 0) is a task and runs after the microtask queue is empty, so \"timeout\" is last.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide"
+    },
+    {
+      "id": "async-7",
+      "prompt": "What happens if you call this function, without awaiting it?",
+      "code": "async function fail() {\n  throw new Error(\"nope\");\n}\nfail();",
+      "options": [
+        "The error is thrown synchronously in the caller",
+        "It returns a rejected Promise",
+        "It returns undefined and the error is lost",
+        "The event loop stops"
+      ],
+      "answerIndex": 1,
+      "explanation": "A throw inside an async function rejects the promise that the call returned. It does not throw synchronously at the call site, so a surrounding try/catch in the caller will not see it unless that caller awaits the promise or attaches a catch handler.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"
+    },
+    {
+      "id": "async-8",
+      "prompt": "Why can try/catch around await fetch(url) inside an async function catch a failed request?",
+      "options": [
+        "Because await turns a rejection into an exception in that async function",
+        "Because fetch never fails",
+        "Because try/catch also catches errors from any later setTimeout",
+        "Because await always converts the response body to JSON"
+      ],
+      "answerIndex": 0,
+      "explanation": "When the awaited promise rejects, await throws at that line, and a local try/catch can handle it. That is the async/await equivalent of .catch(). It does not catch errors scheduled later with setTimeout, and await does not parse JSON by itself.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await"
+    },
+    {
+      "id": "async-9",
+      "prompt": "What does Promise.race do with a list of promises?",
+      "options": [
+        "It waits for every promise and returns the fastest fulfillment, ignoring rejections",
+        "It settles with the result of the first promise that fulfills or rejects",
+        "It runs the promises one after another in array order",
+        "It cancels the slower promises"
+      ],
+      "answerIndex": 1,
+      "explanation": "Promise.race settles as soon as the first input settles, whether that first settlement is a fulfillment or a rejection. The other promises are not cancelled; they keep running, but their results no longer affect the race.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race"
+    },
+    {
+      "id": "async-10",
+      "prompt": "What happens to the promise returned by then in this snippet?",
+      "code": "Promise.resolve(1).then(() => {\n  throw new Error(\"x\");\n})",
+      "options": [
+        "It still fulfills with 1",
+        "It fulfills with the Error object",
+        "It rejects with that error",
+        "It hangs forever because then cannot throw"
+      ],
+      "answerIndex": 2,
+      "explanation": "If a then callback throws, the promise that then returned rejects with that error. The original Promise.resolve(1) has already fulfilled; it is the next link in the chain that rejects. Attach a catch (or await in try/catch) to handle it.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then"
+    }
+  ]
+}

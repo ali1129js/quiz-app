@@ -12,7 +12,7 @@ Desktop (1280px). Motion is off (the default). Khaki is the light theme; Graphit
 
 **Deck picker, Khaki**
 
-![The deck picker in Khaki, showing the seven JavaScript decks grouped by book](docs/picker-khaki-1280.png)
+![The deck picker in Khaki, showing the JavaScript decks grouped by book](docs/picker-khaki-1280.png)
 
 **Deck picker, Graphite**
 
@@ -30,11 +30,12 @@ See [docs/LEARN.md](docs/LEARN.md) for how the pure quiz reducer, startup deck v
 
 ## Features
 
-- 7 decks, 74 questions, grouped by book:
+- 8 decks, 84 questions, grouped by book:
   - **You Don't Know JS Yet**: Get Started (12), Scope & Closures (12), Objects & Classes (12), Types & Grammar (12)
   - **Classic decks** (from the original app, audited and rewritten): JS Basics (6), Scope & Compilation (11), Lexical Scope (9)
+  - **JavaScript concepts**: Async / Promises (10), with further-reading links to MDN (the 2nd-edition YDKJS series has no async book yet)
 - An explanation after every answer, with the correct and wrong choices highlighted
-- A "Further reading" link on every question to the matching book chapter
+- A "Further reading" link on every question to the matching book chapter, or to MDN on the Async / Promises deck
 - A progress bar and a running score
 - A results screen with a percentage, a review of missed questions, a "Practice missed" run of those ids, a restart button and a way to switch decks. Missed ids are kept per deck (Zod-checked) until they are answered right.
 - An optional shuffle for both questions and answers
@@ -79,7 +80,7 @@ Add an entry to a deck in `src/data/`. `answerIndex` is the 0-based index into `
 
 ## Attribution
 
-The topics follow Kyle Simpson's [**You Don't Know JS Yet**](https://github.com/getify/You-Dont-Know-JS/tree/2nd-ed) (2nd edition), © Kyle Simpson, licensed [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). All questions, code samples and explanations in this app are original and are not taken from the book. Each question links to the relevant chapter for further reading. This project is not affiliated with or endorsed by the author.
+The topics follow Kyle Simpson's [**You Don't Know JS Yet**](https://github.com/getify/You-Dont-Know-JS/tree/2nd-ed) (2nd edition), © Kyle Simpson, licensed [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). All questions, code samples and explanations in this app are original and are not taken from the book. Each question links to the relevant chapter, or to MDN on the Async / Promises deck, for further reading. This project is not affiliated with or endorsed by the author.
 
 ## AI-assisted
 
