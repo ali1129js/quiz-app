@@ -9,10 +9,11 @@ interface Props {
   best: { score: number; total: number } | undefined;
   isNewBest: boolean;
   onRestart: () => void;
+  onPracticeMissed?: () => void;
   onChooseDeck: () => void;
 }
 
-export function Results({ deck, questions, answers, best, isNewBest, onRestart, onChooseDeck }: Props) {
+export function Results({ deck, questions, answers, best, isNewBest, onRestart, onPracticeMissed, onChooseDeck }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => headingRef.current?.focus(), []);
 
@@ -66,7 +67,12 @@ export function Results({ deck, questions, answers, best, isNewBest, onRestart, 
       )}
 
       <div className="actions">
-        <button type="button" className="btn primary" onClick={onRestart}>
+        {wrong.length > 0 && onPracticeMissed ? (
+          <button type="button" className="btn primary" onClick={onPracticeMissed}>
+            Practice missed
+          </button>
+        ) : null}
+        <button type="button" className={wrong.length > 0 && onPracticeMissed ? "btn" : "btn primary"} onClick={onRestart}>
           Restart deck
         </button>
         <button type="button" className="btn" onClick={onChooseDeck}>

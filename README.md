@@ -36,7 +36,7 @@ See [docs/LEARN.md](docs/LEARN.md) for how the pure quiz reducer, startup deck v
 - An explanation after every answer, with the correct and wrong choices highlighted
 - A "Further reading" link on every question to the matching book chapter
 - A progress bar and a running score
-- A results screen with a percentage, a review of missed questions, a restart button and a way to switch decks
+- A results screen with a percentage, a review of missed questions, a "Practice missed" run of those ids, a restart button and a way to switch decks. Missed ids are kept per deck (Zod-checked) until they are answered right.
 - An optional shuffle for both questions and answers
 - Your best score for each deck, saved in `localStorage`
 - Accessible: real `<button>` options, full keyboard support, focus moved on each step, a live region for feedback, and visible focus rings

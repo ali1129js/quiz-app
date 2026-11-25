@@ -53,6 +53,7 @@ export const inProgressSchema = z
     questions: z.array(questionSchema).min(1),
     index: z.number().int().min(0),
     answers: z.array(z.union([z.number().int(), z.null()])),
+    practice: z.boolean().default(false),
   })
   .refine((run) => run.answers.length === run.questions.length, "answers length")
   .refine((run) => run.index < run.questions.length, "index out of range")
@@ -92,3 +93,74 @@ export function clearInProgress(storage: Storage | undefined = globalThis.localS
     // ignore
   }
 }
+
+export const MISSED_KEY = "quiz-app:missed:v1";
+
+const missedStoreSchema = z.object({
+  byDeck: z.record(z.string().min(1), z.array(z.string().min(1))),
+});
+
+export type MissedByDeck = Record<string, string[]>;
+
+function loadMissedStore(storage: Storage | undefined = globalThis.localStorage): MissedByDeck {
+  try {
+    const raw = storage?.getItem(MISSED_KEY);
+    if (!raw) return {};
+    const parsed = missedStoreSchema.safeParse(JSON.parse(raw));
+    if (!parsed.success) return {};
+    const byDeck: MissedByDeck = {};
+    for (const [deckId, ids] of Object.entries(parsed.data.byDeck)) {
+      const unique = [...new Set(ids)];
+      if (unique.length > 0) byDeck[deckId] = unique;
+    }
+    return byDeck;
+  } catch {
+    return {};
+  }
+}
+
+function saveMissedStore(byDeck: MissedByDeck, storage: Storage | undefined = globalThis.localStorage): void {
+  const parsed = missedStoreSchema.safeParse({ byDeck });
+  if (!parsed.success) return;
+  try {
+    storage?.setItem(MISSED_KEY, JSON.stringify(parsed.data));
+  } catch {
+    // storage full or disabled: ignore
+  }
+}
+
+export function loadMissedIds(
+  deckId: string,
+  storage: Storage | undefined = globalThis.localStorage,
+): string[] {
+  return loadMissedStore(storage)[deckId] ?? [];
+}
+
+export function loadAllMissed(storage: Storage | undefined = globalThis.localStorage): MissedByDeck {
+  return loadMissedStore(storage);
+}
+
+/**
+ * After a finished run, add still-missed ids for that deck and drop any that
+ * were answered correctly, so a later practice run only keeps weak spots.
+ */
+export function recordRunMisses(
+  deckId: string,
+  missedIds: readonly string[],
+  correctIds: readonly string[],
+  storage: Storage | undefined = globalThis.localStorage,
+): string[] {
+  const byDeck = loadMissedStore(storage);
+  const next = new Set(byDeck[deckId] ?? []);
+  for (const id of correctIds) next.delete(id);
+  for (const id of missedIds) next.add(id);
+  if (next.size === 0) {
+    const rest = Object.fromEntries(Object.entries(byDeck).filter(([id]) => id !== deckId));
+    saveMissedStore(rest, storage);
+    return [];
+  }
+  byDeck[deckId] = [...next];
+  saveMissedStore(byDeck, storage);
+  return byDeck[deckId];
+}
+

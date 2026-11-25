@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import type { Deck } from "../types";
-import type { BestScores } from "../storage";
+import type { BestScores, MissedByDeck } from "../storage";
 import { groupDecks } from "../decks";
 
 export interface ResumeOffer {
@@ -12,12 +12,14 @@ export interface ResumeOffer {
 interface Props {
   decks: readonly Deck[];
   best: BestScores;
+  missedByDeck?: MissedByDeck;
   resume?: ResumeOffer | null;
   onResume?: () => void;
   onStart: (deckId: string, shuffled: boolean) => void;
+  onPracticeMissed?: (deckId: string, shuffled: boolean) => void;
 }
 
-export function DeckPicker({ decks, best, resume, onResume, onStart }: Props) {
+export function DeckPicker({ decks, best, missedByDeck = {}, resume, onResume, onStart, onPracticeMissed }: Props) {
   const [shuffled, setShuffled] = useState(false);
   const shuffleId = useId();
 
@@ -49,8 +51,9 @@ export function DeckPicker({ decks, best, resume, onResume, onStart }: Props) {
           <ul className="deck-list">
             {group.decks.map((deck) => {
               const b = best[deck.id];
+              const missedCount = missedByDeck[deck.id]?.length ?? 0;
               return (
-                <li key={deck.id}>
+                <li key={deck.id} className="deck-item">
                   <button type="button" className="deck-card card-3d" onClick={() => onStart(deck.id, shuffled)}>
                     <span className="deck-title">{deck.title}</span>
                     <span className="deck-desc">{deck.description}</span>
@@ -59,6 +62,11 @@ export function DeckPicker({ decks, best, resume, onResume, onStart }: Props) {
                       {b ? ` · Best: ${b.score}/${b.total}` : ""}
                     </span>
                   </button>
+                  {missedCount > 0 && onPracticeMissed ? (
+                    <button type="button" className="btn practice-missed" onClick={() => onPracticeMissed(deck.id, shuffled)}>
+                      Practice missed ({missedCount})
+                    </button>
+                  ) : null}
                 </li>
               );
             })}

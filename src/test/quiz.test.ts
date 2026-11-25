@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { initialState, missed, quizReducer, score, shuffle, shuffleQuestions, type QuizState } from "../quiz";
-import type { Question } from "../types";
+import { initialState, missed, questionsByIds, quizReducer, score, shuffle, shuffleQuestions, type QuizState } from "../quiz";
+import type { Deck, Question } from "../types";
 
 const qs: Question[] = [
   { id: "a", prompt: "A?", options: ["x", "y", "z"], answerIndex: 1, explanation: "y", source: "https://x" },
@@ -101,5 +101,33 @@ describe("resume", () => {
         answers,
       }),
     ).toEqual(initialState);
+  });
+});
+
+describe("questionsByIds", () => {
+  const deck: Deck = {
+    id: "d",
+    book: "B",
+    title: "T",
+    description: "D",
+    questions: qs,
+  };
+
+  it("returns an empty list when there are no missed ids", () => {
+    expect(questionsByIds(deck, [])).toEqual([]);
+  });
+
+  it("keeps requested ids in order and drops stale ones", () => {
+    expect(questionsByIds(deck, ["b", "missing", "a", "b"]).map((q) => q.id)).toEqual(["b", "a"]);
+  });
+});
+
+describe("practice start", () => {
+  it("ignores an empty question list and flags a practice run", () => {
+    expect(quizReducer(initialState, { type: "start", deckId: "d", questions: [], shuffled: false, practice: true })).toEqual(
+      initialState,
+    );
+    const s = quizReducer(initialState, { type: "start", deckId: "d", questions: [qs[0]!], shuffled: false, practice: true });
+    expect(s).toMatchObject({ status: "playing", practice: true, questions: [qs[0]] });
   });
 });

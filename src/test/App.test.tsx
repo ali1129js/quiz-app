@@ -3,7 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 import { getDeck } from "../decks";
-import { IN_PROGRESS_KEY, loadInProgress } from "../storage";
+import { IN_PROGRESS_KEY, loadInProgress, loadMissedIds } from "../storage";
 
 const lexical = getDeck("lexical-scope")!;
 const basics = getDeck("basics")!;
@@ -84,5 +84,47 @@ describe("App", () => {
     expect(loadInProgress()).toBeNull();
     expect(screen.queryByRole("button", { name: "Resume" })).not.toBeInTheDocument();
     expect(localStorage.getItem(IN_PROGRESS_KEY)).toBeNull();
+  });
+
+  it("starts a practice run of missed questions only and keeps the store until they are right", async () => {
+    const user = userEvent.setup();
+    const first = render(<App />);
+    await user.click(screen.getByRole("button", { name: /JS Basics/ }));
+
+    for (const [i, q] of basics.questions.entries()) {
+      const pick = i === 0 || i === 1 ? (q.answerIndex + 1) % q.options.length : q.answerIndex;
+      const opts = within(screen.getByRole("list")).getAllByRole("button");
+      await user.click(opts[pick]!);
+      await user.click(screen.getByRole("button", { name: /Next question|See results/ }));
+    }
+
+    const total = basics.questions.length;
+    expect(screen.getByRole("heading", { name: `JS Basics: you scored ${total - 2} / ${total}` })).toBeInTheDocument();
+    expect(screen.getByText("Review missed questions (2)")).toBeInTheDocument();
+    expect(loadMissedIds("basics")).toEqual([basics.questions[0]!.id, basics.questions[1]!.id]);
+
+    await user.click(screen.getByRole("button", { name: "Practice missed" }));
+    expect(screen.getByText("Question 1 of 2")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: new RegExp(basics.questions[0]!.prompt.replace(/[?]/g, "\\?")) })).toBeInTheDocument();
+
+    // answer the first miss correctly, the second still wrong
+    const firstQ = basics.questions[0]!;
+    await user.click(screen.getByRole("button", { name: firstQ.options[firstQ.answerIndex]! }));
+    await user.click(screen.getByRole("button", { name: "Next question" }));
+    const secondQ = basics.questions[1]!;
+    const wrong = (secondQ.answerIndex + 1) % secondQ.options.length;
+    await user.click(screen.getByRole("button", { name: secondQ.options[wrong]! }));
+    await user.click(screen.getByRole("button", { name: "See results" }));
+
+    expect(screen.getByRole("heading", { name: "JS Basics: you scored 1 / 2" })).toBeInTheDocument();
+    expect(loadMissedIds("basics")).toEqual([secondQ.id]);
+    expect(screen.queryByText(/New personal best/)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /back to deck selection/ }));
+    first.unmount();
+
+    render(<App />);
+    expect(screen.getByRole("button", { name: /Practice missed \(1\)/ })).toBeInTheDocument();
+    expect(loadMissedIds("basics")).toEqual([secondQ.id]);
   });
 });

@@ -1,4 +1,4 @@
-import type { Question } from "./types";
+import type { Deck, Question } from "./types";
 
 export type Random = () => number;
 
@@ -32,6 +32,8 @@ export type QuizState =
       status: "playing" | "finished";
       deckId: string;
       shuffled: boolean;
+      /** True when this run is only previously missed question ids, not the full deck. */
+      practice: boolean;
       questions: Question[];
       index: number;
       /** Selected option index per question, null = not answered yet. */
@@ -39,11 +41,19 @@ export type QuizState =
     };
 
 export type QuizAction =
-  | { type: "start"; deckId: string; questions: Question[]; shuffled: boolean }
+  | { type: "start"; deckId: string; questions: Question[]; shuffled: boolean; practice?: boolean }
   | { type: "answer"; optionIndex: number }
   | { type: "next" }
   | { type: "restart"; questions: Question[] }
-  | { type: "resume"; deckId: string; shuffled: boolean; questions: Question[]; index: number; answers: (number | null)[] }
+  | {
+      type: "resume";
+      deckId: string;
+      shuffled: boolean;
+      questions: Question[];
+      index: number;
+      answers: (number | null)[];
+      practice?: boolean;
+    }
   | { type: "quit" };
 
 export const initialState: QuizState = { status: "idle" };
@@ -51,10 +61,12 @@ export const initialState: QuizState = { status: "idle" };
 export function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case "start":
+      if (action.questions.length === 0) return state;
       return {
         status: "playing",
         deckId: action.deckId,
         shuffled: action.shuffled,
+        practice: action.practice === true,
         questions: action.questions,
         index: 0,
         answers: action.questions.map(() => null),
@@ -74,7 +86,7 @@ export function quizReducer(state: QuizState, action: QuizAction): QuizState {
       return index >= state.questions.length ? { ...state, status: "finished" } : { ...state, index };
     }
     case "restart":
-      if (state.status === "idle") return state;
+      if (state.status === "idle" || action.questions.length === 0) return state;
       return {
         ...state,
         status: "playing",
@@ -95,6 +107,7 @@ export function quizReducer(state: QuizState, action: QuizAction): QuizState {
         status: "playing",
         deckId: action.deckId,
         shuffled: action.shuffled,
+        practice: action.practice === true,
         questions: action.questions,
         index: action.index,
         answers: action.answers,
@@ -117,3 +130,19 @@ export function missed(questions: readonly Question[], answers: readonly (number
     .map((question, i) => ({ question, answer: answers[i] ?? null }))
     .filter(({ question, answer }) => !isCorrect(question, answer));
 }
+
+/** Keep requested ids that still exist in the deck, in the given order, dropping stale ones. */
+export function questionsByIds(deck: Deck, ids: readonly string[]): Question[] {
+  const byId = new Map(deck.questions.map((q) => [q.id, q]));
+  const out: Question[] = [];
+  const seen = new Set<string>();
+  for (const id of ids) {
+    const q = byId.get(id);
+    if (q && !seen.has(id)) {
+      out.push(q);
+      seen.add(id);
+    }
+  }
+  return out;
+}
+

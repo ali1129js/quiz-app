@@ -87,6 +87,8 @@ h2:focus { outline: none; }
 .toggle input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
 .deck-list { list-style: none; padding: 0.5rem 0.75rem 0.75rem 0; margin: 0; display: grid; gap: 1.25rem; }
 .options { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.deck-item { display: grid; gap: 0.5rem; }
+.practice-missed { justify-self: start; }
 .deck-card { width: 100%; text-align: left; display: grid; gap: 0.25rem; padding: 1rem 1.25rem; border-radius: var(--radius); background: var(--surface); color: inherit; font: inherit; cursor: pointer; }
 .deck-title { font-weight: 700; font-size: 1.1rem; }
 .deck-desc { color: var(--muted); }

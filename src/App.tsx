@@ -1,14 +1,18 @@
 import { useEffect, useReducer, useState } from "react";
 import { DECKS, getDeck } from "./decks";
-import { initialState, quizReducer, score, shuffleQuestions } from "./quiz";
+import { initialState, isCorrect, missed, questionsByIds, quizReducer, score, shuffleQuestions } from "./quiz";
 import {
   clearInProgress,
+  loadAllMissed,
   loadBestScores,
   loadInProgress,
+  loadMissedIds,
+  recordRunMisses,
   recordScore,
   saveInProgress,
   type BestScores,
   type InProgressRun,
+  type MissedByDeck,
 } from "./storage";
 import type { Deck, Question } from "./types";
 import { DeckPicker } from "./components/DeckPicker";
@@ -46,12 +50,14 @@ export default function App() {
   const [best, setBest] = useState<BestScores>(() => loadBestScores());
   const [newBest, setNewBest] = useState(false);
   const [resume, setResume] = useState<InProgressRun | null>(() => usableResume(loadInProgress()));
+  const [missedByDeck, setMissedByDeck] = useState<MissedByDeck>(() => loadAllMissed());
 
   useEffect(() => {
     if (state.status !== "playing") return;
     const run = {
       deckId: state.deckId,
       shuffled: state.shuffled,
+      practice: state.practice,
       questions: state.questions,
       index: state.index,
       answers: state.answers,
@@ -60,11 +66,13 @@ export default function App() {
     setResume(run);
   }, [state]);
 
-  const start = (deckId: string, shuffled: boolean) => {
+  const start = (deckId: string, shuffled: boolean, practice = false) => {
     const deck = getDeck(deckId);
     if (!deck) return;
+    const source = practice ? questionsByIds(deck, loadMissedIds(deckId)) : deck.questions;
+    if (source.length === 0) return;
     setNewBest(false);
-    dispatch({ type: "start", deckId, shuffled, questions: prepare(deck, shuffled) });
+    dispatch({ type: "start", deckId, shuffled, practice, questions: prepare({ ...deck, questions: source }, shuffled) });
   };
 
   const quit = () => {
@@ -76,9 +84,17 @@ export default function App() {
   const next = () => {
     if (state.status !== "playing") return;
     if (state.index === state.questions.length - 1 && state.answers[state.index] !== null) {
-      const isBest = recordScore(state.deckId, score(state.questions, state.answers), state.questions.length);
-      setNewBest(isBest);
-      setBest(loadBestScores());
+      const wrongIds = missed(state.questions, state.answers).map((m) => m.question.id);
+      const rightIds = state.questions.filter((q, i) => isCorrect(q, state.answers[i] ?? null)).map((q) => q.id);
+      recordRunMisses(state.deckId, wrongIds, rightIds);
+      setMissedByDeck(loadAllMissed());
+      if (!state.practice) {
+        const isBest = recordScore(state.deckId, score(state.questions, state.answers), state.questions.length);
+        setNewBest(isBest);
+        setBest(loadBestScores());
+      } else {
+        setNewBest(false);
+      }
       clearInProgress();
       setResume(null);
     }
@@ -111,7 +127,9 @@ export default function App() {
           <DeckPicker
             decks={DECKS}
             best={best}
+            missedByDeck={missedByDeck}
             onStart={start}
+            onPracticeMissed={(deckId, shuffled) => start(deckId, shuffled, true)}
             {...(resume && resumeDeck
               ? {
                   resume: {
@@ -127,6 +145,7 @@ export default function App() {
                       questions: resume.questions.map(toQuestion),
                       index: resume.index,
                       answers: resume.answers,
+                      practice: resume.practice,
                     }),
                 }
               : {})}
@@ -164,6 +183,19 @@ export default function App() {
             onRestart={() => {
               setNewBest(false);
               dispatch({ type: "restart", questions: prepare(deck, state.shuffled) });
+            }}
+            onPracticeMissed={() => {
+              const ids = missed(state.questions, state.answers).map((m) => m.question.id);
+              const questions = questionsByIds(deck, ids);
+              if (questions.length === 0) return;
+              setNewBest(false);
+              dispatch({
+                type: "start",
+                deckId: deck.id,
+                shuffled: state.shuffled,
+                practice: true,
+                questions: prepare({ ...deck, questions }, state.shuffled),
+              });
             }}
             onChooseDeck={quit}
           />
