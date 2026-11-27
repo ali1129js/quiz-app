@@ -76,7 +76,7 @@ Add an entry to a deck in `src/data/`. `answerIndex` is the 0-based index into `
 
 ## Deployment
 
-`.github/workflows/deploy.yml` (staged in this PR as `docs/deploy.workflow.yml`, because the token that opened the PR had no `workflow` scope; move it into `.github/workflows/` to enable it) runs lint, typecheck, tests and build on every push and PR. On pushes to `main`/`master` it deploys `dist/` with `actions/deploy-pages`. This needs **Settings → Pages → Build and deployment → Source: "GitHub Actions"** (today the site is served from the `gh-pages` branch via `npm run deploy` in the old app).
+`.github/workflows/deploy.yml` runs lint, typecheck, tests and build on every push and PR. On pushes to `main`/`master` it deploys `dist/` with `actions/deploy-pages`. Pages is set to **GitHub Actions** (it used to be served from the `gh-pages` branch via `npm run deploy` in the old app).
 
 ## Attribution
 

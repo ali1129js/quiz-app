@@ -1,3 +1,4 @@
+# Moved to .github/workflows/deploy.yml (QUIZ-05). This copy is kept only as a reference.
 name: Deploy to GitHub Pages
 
 on:
